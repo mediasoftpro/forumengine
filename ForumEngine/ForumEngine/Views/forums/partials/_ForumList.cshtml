@@ -1,0 +1,91 @@
+﻿@model Jugnoon.Forums.Models.ForumListViewModel
+@using Jugnoon.Forums
+@inject IStringLocalizer<GeneralResource> GeneralResource
+@inject IStringLocalizer<ForumResource> ForumResource
+@inject Microsoft.Extensions.Options.IOptions<Jugnoon.Settings.Registration> registrationSettings
+@{
+    if (Model.Records > 0)
+    {
+        <table class="table table-order">
+            <tr>
+                <th style="width: 50%;">
+                    @ForumResource["_forum"].Value
+                </th>
+                <th style="width: 10%;">
+                    @ForumResource["_topics"].Value 
+                </th>
+                <th style="width:10%;">
+                    @ForumResource["_posts"].Value
+                </th>
+                <th style="width: 30%;">
+                    @ForumResource["_last_post"].Value
+                </th>
+            </tr>
+            <tbody>
+                @foreach (var forum in Model.Data)
+                {
+                    <tr>
+                        <td class="nonealt">
+                            <a class="frm-head m-b-5" href="@Forum_Urls.Prepare_Forum_Url(forum.id, forum.title, false)">@forum.title</a>
+                            <p>@Html.Raw(forum.description)</p>
+                        </td>
+                        <td style="width: 10%;">
+                            @{
+                                string _topics = "0";
+                                if (forum.threads > 0)
+                                {
+                                    _topics = string.Format("{0:#,###}", forum.threads);
+                                }
+                            }
+                            @_topics
+                        </td>
+                        <td style="width:10%;">
+                            @{
+                                // Posts
+                                string _posts = "0";
+                                if (forum.posts > 0)
+                                {
+                                    _posts = string.Format("{0:#,###}", forum.posts);
+                                }
+                            }
+                            @_posts
+                        </td>
+                        <td style="width: 30%;">
+
+                            @if (forum.lastpost.Count > 0)
+                            {
+                                if (forum.lastpost[0].title.Length > 60)
+                                {
+                                    forum.lastpost[0].title = forum.lastpost[0].title.Substring(0, 60) + "...";
+                                }
+
+                                <a class="bold" href="@Forum_Urls.Prepare_Topic_Url((long)forum.lastpostid, forum.lastpost[0].title, false)" title="@forum.lastpost[0].title">@forum.lastpost[0].title</a>
+                                <br />
+                                @Html.Raw("by")
+                                <a href="@UserUrlConfig.ProfileUrl(forum.lastpost[0].author, registrationSettings.Value.uniqueFieldOption)">forum.LastPost[0].username</a>
+                                <br />@forum.lastposttime.Value.ToString("yyyyMMddHHmmss");
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+        if (Model.Records > Model.QueryOptions.pagesize)
+        {
+            var _paginationEntity = new PaginationViewModel()
+            {
+                pagenumber = Model.QueryOptions.pagenumber,
+                TotalRecords = Model.Records,
+                PageSize = Model.QueryOptions.pagesize,
+                Default_Url = Model.DefaultUrl,
+                Pagination_Url = Model.PaginationUrl
+            };
+            @await Html.PartialAsync("~/Views/partials/list/_Pagination.cshtml", _paginationEntity)
+        }
+    }
+    else
+    {
+        @await Html.PartialAsync("~/Views/partials/utility/_norecord.cshtml", new NoRecordModelView() { Message = GeneralResource["_no_records"].Value })
+    }
+}

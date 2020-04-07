@@ -1,0 +1,27 @@
+﻿@model Jugnoon.Forums.Models.ForumItemViewModel
+@inject IStringLocalizer<GeneralResource> GeneralResource
+@*
+    Core ForumItem Item Design
+*@
+
+@{
+  
+}
+@if (Model.ListObject.ListType == Jugnoon.Scripts.ListType.Links)
+{
+    // Forum Links Only
+    <a href="@Model.ProfileUrl" title="@Model.Data.title">@Model.Data.title</a>
+}
+else
+{
+    <div class="col-md-12 qa-item">
+        <a href="@Model.ProfileUrl" title="@Model.Data.title" class="title">@Model.Data.title</a>
+        <div>
+            @GeneralResource["_asked"] @Jugnoon.Utility.UtilityBLL.Generate_Date(Model.Data.created_at, Model.ListObject.DateFormat) by
+            <a class="light" href="@Model.AuthorUrl">@UserBLL.prepareUserName(Model.Data.author)</a>.
+        </div>
+    </div>
+
+}
+
+

@@ -1,0 +1,95 @@
+<app-loader *ngIf="loaddata"></app-loader>
+<div class="card m-b-10" *ngIf="!loaddata && Data.length > 0">
+  <div class="card-body">
+    <h4 class="card-title">
+      {{title}} <span *ngIf="stats > 0">({{stats}})</span>
+    </h4>
+    <div class="row m-b-10" *ngIf="Data.length > 0">
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover table-striped no-wrap">
+          <thead>
+            <tr>
+              <th>Threads</th>
+              <th>Replies</th>
+              <th>Views</th>
+              <th>--</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let item of Data; let i = index"
+            >
+              <td>
+                <strong
+                  ><a
+                    *ngIf="isAdmin"
+                    href
+                    (click)="viewRecord(item, $event); (false)"
+                    >{{ item.title }}</a
+                  ><a *ngIf="!isAdmin" href="item.url"
+                    >{{ item.title }}</a
+                  ></strong
+                >
+                <div class="m-b-5 m-t-5">
+                  <span
+                    class="badge badge-danger m-r-5 m-b-5"
+                    *ngIf="item.isenabled == 0"
+                    >Blocked</span
+                  >
+                  <span
+                    class="badge badge-success m-r-5 m-b-5"
+                    *ngIf="item.isenabled == 1"
+                    >Active</span
+                  >
+                  <span
+                    class="badge badge-info m-r-5 m-b-5"
+                    *ngIf="item.isapproved == 1"
+                    >Approved</span
+                  >
+                  <span
+                    class="badge badge-warning m-r-5 m-b-5"
+                    *ngIf="item.isapproved == 0"
+                    >Under Review</span
+                  >
+
+                  <span
+                    class="badge badge-danger m-r-5 m-b-5"
+                    *ngIf="item.isadult == 1"
+                    >Adult</span
+                  >
+                </div>
+              </td>
+
+              <td>
+                {{ item.replies }}
+              </td>
+              <td>
+                {{ item.views }}
+              </td>
+
+              <td class="text-nowrap">
+                <a
+                  [routerLink]="[rout_url +'/process/' + item.enc_id]"
+                  data-toggle="tooltip"
+                  data-original-title="Edit"
+                >
+                  <i class="fa fa-pencil text-inverse m-r-10"></i>
+                </a>
+                <a
+                  (click)="delete(item, i, $event); (false)"
+                  href="#"
+                  data-toggle="tooltip"
+                  data-original-title="Close"
+                >
+                  <i class="fa fa-close text-danger"></i>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <a [routerLink]="[browse_url]" class="card-link pull-right">View All</a>
+    <div class="clearfix"></div>
+  </div>
+</div>

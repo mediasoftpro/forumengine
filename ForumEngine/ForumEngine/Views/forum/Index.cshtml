@@ -1,0 +1,21 @@
+﻿@inject IStringLocalizer<GeneralResource> GeneralResource
+@model Jugnoon.Forums.Models.ForumTopicsListViewModel
+@{
+    // activate header tab
+    ViewBag.ForumTabCss = "active";
+    // setup search with forum topics
+    ViewBag.SearchType = 5;
+
+}
+    <partial name="~/Views/Shared/_BreadCrumb.cshtml" model="new BreadViewModel() { BreadItems = Model.BreadItems }" />
+
+<div class="container">
+
+    @await Html.PartialAsync("~/Views/forum/partials/_List.cshtml")
+
+    <div class="gap gap-small">
+    </div>
+    @await Html.PartialAsync("~/Views/partials/ads/ad_728.cshtml", new AdsModelView() { isAdult = false })
+
+</div>
+

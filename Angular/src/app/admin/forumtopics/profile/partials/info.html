@@ -1,0 +1,44 @@
+<div class="row" *ngFor="let post of Info; let i = index">
+ 
+  <div class="col-md-10">
+    <div class="card">
+      <div class="card-body">
+        <div *ngIf="i === 0">
+          <h2>{{ post.title }}</h2>
+          <hr />
+        </div>
+        <div class="row">
+             <div class="col-md-10">
+                <p>
+                    Posted: <span class="text-muted"><i class="fa fa-clock-o"></i></span>
+                    {{ post.created_at | date: "fullDate" }}
+                </p>
+                <hr />
+                <div class="card-text m-b-5" [innerHTML]="post.description"></div>
+             </div>
+             <div class="col-md-2">
+                <a
+                class="m-l-5"
+                (click)="edit(post, $event); (false)"
+                href="#"
+              >
+                <i class="fa fa-pencil text-inverse m-r-10"></i>
+              </a>
+              <a
+                class="m-l-5"
+                (click)="delete(post, i, $event); (false)"
+                href="#"
+              >
+                <i class="fa fa-close text-danger"></i>
+              </a>
+             </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<hr />
+<div class="m-b-10 m-t-10">
+  <button (click)="PostReply()" class="btn btn-primary">Post Reply</button>
+</div>

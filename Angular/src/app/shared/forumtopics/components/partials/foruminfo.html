@@ -1,0 +1,12 @@
+<div class="m-t-5 m-b-5" *ngIf="SelectedForum.id > 0">
+  <a *ngIf="isAdmin"
+    class="btn btn-xs btn-primary"
+    [routerLink]="['/forumtopics/forum/' + SelectedForum.id]"
+    >{{ SelectedForum.title }}</a
+  >
+  <a *ngIf="!isAdmin"
+    class="btn btn-xs btn-primary"
+    href="{{SelectedForum.url}}"
+    >{{ SelectedForum.title }}</a
+  >
+</div>

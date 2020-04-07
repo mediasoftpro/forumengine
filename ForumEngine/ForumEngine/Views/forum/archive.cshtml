@@ -1,0 +1,7 @@
+﻿<div class="container">
+    <partial name="~/Views/forum/partials/_List.cshtml" />
+    <div class="gap gap-small">
+    </div>
+    @await Html.PartialAsync("~/Views/partials/ads/ad_728.cshtml", new AdsModelView() { isAdult = false })
+
+</div>

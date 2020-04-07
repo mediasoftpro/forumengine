@@ -1,0 +1,16 @@
+<div class="row m-t-10 m-t-20" style="min-height: 500px;">
+  <div class="col-md-6 col-sm-12">
+    
+    <div *ngIf="(configs$ | async).general.features.enable_forums">
+      <app-smfrmtopics-list
+        [pagesize]="4"
+        [type]="0"
+        [isAdmin]="isAdmin"
+        [title]="'Recent Topics'"
+        [rout_url]="'/forumtopics'"
+        [browse_url]="'/forumtopics'"
+      ></app-smfrmtopics-list>
+    </div>
+    
+  </div>
+</div>

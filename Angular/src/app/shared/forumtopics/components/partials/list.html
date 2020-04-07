@@ -1,0 +1,147 @@
+<alert></alert>
+<app-loader *ngIf="loading$ | async"></app-loader>
+<div *ngIf="!(loading$ | async)">
+  <div *ngIf="(Data$ | async).length > 0">
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover table-striped no-wrap">
+        <thead>
+          <tr>
+            <th *ngIf="!PublicView">
+              <div class="checkbox">
+                <input
+                  [(ngModel)]="selectall"
+                  (ngModelChange)="processChange()"
+                  id="selectall"
+                  type="checkbox"
+                />
+                <label class="p-b-0 p-t-0" for="selectall"></label>
+              </div>
+            </th>
+            <th>Threads</th>
+            <th>Replies</th>
+            <th>Views</th>
+            <th *ngIf="!PublicView">--</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            [@fadeIn]="''"
+            [hidden]="item.isdeleted"
+            *ngFor="let item of Data$ | async; trackBy: getKey; let i = index"
+          >
+            <td style="width:5%;" *ngIf="!PublicView">
+              <div class="checkbox">
+                <input
+                  [(ngModel)]="item.Selected"
+                  id="{{ item.id }}"
+                  (ngModelChange)="checkChange()"
+                  type="checkbox"
+                />
+                <label for="{{ item.id }}"></label>
+              </div>
+            </td>
+            <td>
+              <strong
+                ><a
+                  *ngIf="isAdmin && !PublicView"
+                  href
+                  (click)="viewRecord(item, $event); (false)"
+                  >{{ item.title }}</a
+                ><a *ngIf="!isAdmin || PublicView" href="item.url"
+                  >{{ item.title }}</a
+                ></strong
+              ><br />
+              by
+              <a              
+                class="text-muted"
+                *ngIf="item.author && item.author.firstname !== '' && (!isAdmin || PublicView)"
+                  href="{{item.author_url}}"
+              >
+                {{ item.author.firstname }} {{ item.author.firstname }} }}</a                
+              >
+
+              <app-forum-info
+                *ngIf="(forums$ | async).length > 0"
+                [isAdmin]="isAdmin"
+                [Forums]="forums$ | async"
+                [Topic]="item"
+              ></app-forum-info>
+
+              <div class="m-b-5 m-t-5" *ngIf="!PublicView">
+                <span
+                  class="badge badge-danger m-r-5 m-b-5"
+                  *ngIf="item.isenabled == 0"
+                  >Blocked</span
+                >
+                <span
+                  class="badge badge-success m-r-5 m-b-5"
+                  *ngIf="item.isenabled == 1"
+                  >Active</span
+                >
+                <span
+                  class="badge badge-info m-r-5 m-b-5"
+                  *ngIf="item.isapproved == 1"
+                  >Approved</span
+                >
+                <span
+                  class="badge badge-warning m-r-5 m-b-5"
+                  *ngIf="item.isapproved == 0"
+                  >Under Review</span
+                >
+
+                <span
+                  class="badge badge-danger m-r-5 m-b-5"
+                  *ngIf="item.isadult == 1"
+                  >Adult</span
+                >
+              </div>
+            </td>
+
+            <td>
+              {{ item.replies }}
+            </td>
+            <td>
+              {{ item.views }}
+            </td>
+
+            <td class="text-nowrap" *ngIf="!PublicView">
+              <a
+                *ngIf="showReportLink"
+                [routerLink]="['/reports/abuse/' + AbuseContentType + '/' + item.enc_id]"
+                class="m-l-5"
+                ><i class="fa fa-flag" aria-hidden="true"></i
+              ></a>
+              <a
+                (click)="editRecord(item, $event); (false)"
+                href="#"
+                data-toggle="tooltip"
+                data-original-title="Edit"
+              >
+                <i class="fa fa-pencil text-inverse m-r-10"></i>
+              </a>
+              <a
+                (click)="delete(item, i, $event); (false)"
+                href="#"
+                data-toggle="tooltip"
+                data-original-title="Close"
+              >
+                <i class="fa fa-close text-danger"></i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <app-norecord *ngIf="(Data$ | async).length === 0"></app-norecord>
+</div>
+
+<div class="text-center content-group-lg pt-20">
+  <pagination
+    [currentPage]="(pagination$ | async).currentPage"
+    [totalRecords]="(pagination$ | async).totalRecords"
+    [pageSize]="(pagination$ | async).pageSize"
+    (OnSelection)="PaginationChange($event)"
+  >
+  </pagination>
+</div>

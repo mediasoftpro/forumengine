@@ -1,0 +1,212 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using Jugnoon.Forums
+@inject Microsoft.Extensions.Options.IOptions<Jugnoon.Settings.General> generalSettings
+@inject Microsoft.Extensions.Options.IOptions<Jugnoon.Settings.Registration> registrationSettings
+@inject IStringLocalizer<GeneralResource> GeneralResource
+@inject IStringLocalizer<ForumResource> ForumResource
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@model Jugnoon.Forums.Models.TopicListViewModel
+
+@{
+    var PaginationViewPath = "~/Views/partials/list/_Pagination.cshtml";
+}
+
+@{
+    if (Model.Topics != null && Model.Topics.Count > 0)
+    {
+        if (generalSettings.Value.pagination_links > 0)
+        {
+            int maximum_allowed_records = generalSettings.Value.pagination_links * Model.TotalRecords;
+            if (Model.TotalRecords > maximum_allowed_records)
+            {
+                Model.TotalRecords = maximum_allowed_records;
+            }
+        }
+
+        <div class="row">
+            <div class="col-md-10">
+                <h2 class="m-b-10">
+                    @Model.HeadingTitle
+                </h2>
+            </div>
+            <div class="col-md-2">
+                @if (Model.Topics[0].islocked == 0 && Model.Topics[0].isresolved == 0 && Model.Topics[0].type == 0 && !Model.DisablePost)
+                {
+                    <a href="@Forum_Urls.Prepare_Post_Reply_Url(Model.TopicID, 0, Model.isAdmin, false)" class="btn btn-primary m-b-10 pull-right">
+                        @ForumResource["_post_reply"]
+                    </a>
+                    <div class="clearfix"></div>
+                }
+            </div>
+        </div>
+
+
+        <div class="m-b-20">
+            <table class="table table-order">
+                @{
+                    var counter = 0;
+                    foreach (var topic in Model.Topics)
+                    {
+                        if (Model.Topics[0].isresolved == 1 && Model.Topics[0].resolvedpostid == topic.id)
+                        {
+
+                        }
+
+                        <tr class="alt">
+                            <td class="nonealt" style="width: 175px;">
+                                @topic.created_at.ToString("dddd, dd MMMM yyyy")
+                            </td>
+                            <td>
+                                @{
+                                    int firstbound = (((Model.QueryOptions.pagenumber) - 1) * Model.QueryOptions.pagesize) + 1;
+                                    int pcounter = firstbound + counter;
+                                }
+                                <a class="pull-right normal" href="@Forum_Urls.Prepare_Post_Url(topic.id, false)">#@pcounter</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="nonealt">
+                                <p class="m-b-5"><a href="@UserUrlConfig.ProfileUrl(topic.author, registrationSettings.Value.uniqueFieldOption)">@UserBLL.prepareUserName(topic.author)</a></p>
+                                <p class="m-b-5">
+                                    <a href="@UserUrlConfig.ProfileUrl(topic.author, registrationSettings.Value.uniqueFieldOption)">
+                                        <img class="img-rounded" src="@UserUrlConfig.ProfilePhoto(topic.userid, topic.author.picturename, 0)"
+                                             alt="@UserBLL.prepareUserName(topic.author)" />
+                                    </a>
+                                </p>
+
+                                @{
+                                    @*string _posts = "0";
+                                        if (topic.stat_forum_posts > 0)
+                                        {
+                                            _posts = string.Format("{0:#,###}", topic.stat_forum_posts);
+                                        }
+                                        @Html.Raw(SharedLocalizer["Posts"] + ":") @_posts
+                                        // points
+                                        string _points = "0";
+                                        if (topic.stat_forum_points > 0)
+                                        {
+                                            _points = string.Format("{0:#,###}", topic.stat_forum_points);
+                                        }
+
+                                        <br />@Html.Raw(SharedLocalizer["Points"] + ":") @_points *@
+                                    @GeneralResource["_joined"].Value <strong>@string.Format("{0:Y}", topic.author.created_at)</strong>
+                                }
+                            </td>
+                            <td class="alt-container">
+
+                                @if (Model.Topics[0].isresolved == 1 && Model.Topics[0].resolvedpostid == topic.id)
+                                {
+                                    <span class="label label-success mt5 pull-right">
+                                        @ForumResource["_mark_as_best_answer"].Value
+                                    </span>
+                                }
+                                @{
+                                    string content = UGeneral.Prepare_Description(topic.description, 0);
+                                }
+
+                                @Html.Raw(content)
+
+
+                            </td>
+                        </tr>
+                        <tr class="alt">
+
+                            <td colspan="2">
+                                <div class="btn-group pull-right">
+                                    @if (Model.Topics[0].islocked == 0 && Model.Topics[0].isresolved == 1 && Model.Topics[0].type == 0)
+                                    {
+                                        <a href="#" class="btn-primary btn-block btn-sm">
+                                            @GeneralResource["_report"].Value
+                                        </a>
+                                        if (counter > 0)
+                                        {
+                                            @if (SignInManager.IsSignedIn(User))
+                                            {
+                                                var info = await UserManager.GetUserAsync(User);
+                                                var UserName = info.UserName;
+                                                if (UserName == Model.Topics[0].userid)
+                                                {
+                                                    string handler_path = Config.GetUrl("forums/resolved");
+                                                    string parameters = "t=" + Model.Topics[0].id + "&p=" + topic.id + "&pusr=" + topic.userid + "&res=1&cnt=r_" + topic.id;
+                                                    string ajax_event = "Process_Req('" + handler_path + "','" + parameters + "','#r_" + topic.id + "','POST','');return false;";
+
+                                                    <a id="r_@topic.id" href="#" onclick="@ajax_event" title="@ForumResource["_mark_as_anwser"].Value"
+                                                       class="btn btn-success btn-sm">@ForumResource["_mark_as_anwser"].Value</a>
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    @if (Model.Topics[0].isresolved == 1 && Model.Topics[0].resolvedpostid == topic.id)
+                                    {
+                                        string handler_path = Config.GetUrl("forums/resolved");
+                                        string parameters = "t=" + Model.Topics[0].id + "&p=" + topic.id + "&pusr=" + topic.userid + "&res=0&cnt=r_" + topic.id;
+                                        string ajax_event = "Process_Req('" + handler_path + "','" + parameters + "','#r_" + topic.id + "','POST','');return false;";
+                                <a id=" r_@topic.id" href="#" onclick="@ajax_event" title="@ForumResource["_un_answered"].Value" class="btn btn-danger btn-sm">@ForumResource["_unmarked_as_answer"].Value</a>
+                                    }
+                                    <a href="@Forum_Urls.Prepare_Post_Reply_Url(Model.Topics[0].id, topic.id, Model.isAdmin, true)" class="btn btn-info btn-xs">
+                                        @ForumResource["_quote"].Value
+                                    </a>
+                                    @if (Model.isAdmin)
+                                    {
+                                        <a href="@Forum_Urls.Prepare_Post_Reply_Url(Model.Topics[0].id, topic.id, Model.isAdmin, false, true)" class="btn btn-success btn-xs">
+                                            @GeneralResource["_edit"].Value
+                                        </a>
+                                        <a href="@Forum_Urls.Prepare_Post_Remove_Url(topic.id, Model.isAdmin)" class="btn btn-danger btn-xs">
+                                            @GeneralResource["_delete"].Value
+                                        </a>
+                                    }
+                                    else if (SignInManager.IsSignedIn(User))
+                                    {
+                                        var info = await UserManager.GetUserAsync(User);
+                                        var UserName = info.Id;
+
+                                        if (UserName == topic.userid)
+                                        {
+                                            <a href="@Forum_Urls.Prepare_Post_Reply_Url(Model.Topics[0].id, topic.id, Model.isAdmin, false, true)"
+                                               class="btn btn-success btn-xs">
+                                                @GeneralResource["_edit"].Value
+                                            </a>
+                                            <a href="@Forum_Urls.Prepare_Post_Remove_Url(topic.id, Model.isAdmin)" class="btn btn-danger btn-xs">
+                                                @GeneralResource["_delete"].Value    
+                                            </a>
+                                        }
+
+                                    }
+
+                                </div>
+
+                            </td>
+                        </tr>
+                        counter = counter + 1;
+                    }
+                }
+
+            </table>
+        </div>
+
+
+        // Pagination
+        if (Model.TotalRecords > Model.QueryOptions.pagesize)
+        {
+            var _paginationEntity = new PaginationViewModel()
+            {
+                pagenumber = Model.QueryOptions.pagenumber,
+                TotalRecords = Model.TotalRecords,
+                PageSize = Model.QueryOptions.pagesize,
+                Default_Url = Model.DefaultUrl,
+                Pagination_Url = Model.PaginationUrl
+            };
+            @await Html.PartialAsync(PaginationViewPath, _paginationEntity)
+        }
+    }
+    else
+    {
+        @await Html.PartialAsync("~/Views/partials/utility/_norecord.cshtml", new NoRecordModelView() { Message = GeneralResource["_no_records"].Value })
+
+    }
+
+
+
+}

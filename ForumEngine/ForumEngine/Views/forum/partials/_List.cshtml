@@ -1,0 +1,129 @@
+﻿@using Jugnoon.Forums
+@inject IStringLocalizer<GeneralResource> GeneralResource
+@inject IStringLocalizer<ForumResource> ForumResource
+@inject Microsoft.Extensions.Options.IOptions<Jugnoon.Settings.General> generalSettings
+@inject Microsoft.Extensions.Options.IOptions<Jugnoon.Settings.Registration> registrationSettings
+@model Jugnoon.Forums.Models.ForumTopicsListViewModel
+
+@{
+    Model.QueryOptions.pagesize = generalSettings.Value.pagesize;
+    <a href="@Config.GetUrl("forums/post/?f=" + Model.ForumID)" class="btn btn-primary m-b-10 pull-right">
+        @ForumResource["_post_new_topic"].Value
+    </a>
+    <div class="clearfix"></div>
+
+    if (Model.Records == 0)
+    {
+        @await Html.PartialAsync("~/Views/partials/utility/_norecord.cshtml", new NoRecordModelView() { Message = Model.NoRecordFoundText })
+    }
+    else
+    {
+        if (Model.Data.Count > 0)
+        {
+            if (generalSettings.Value.pagination_links > 0)
+            {
+                int maximum_allowed_records = generalSettings.Value.pagination_links * Model.Records;
+                if (Model.Records > maximum_allowed_records)
+                {
+                    Model.Records = maximum_allowed_records;
+                }
+            }
+
+            // List Statistic Display
+            if (Model.isListStatus)
+            {
+                var _listStat = new ListStatViewModels()
+                {
+                    pagenumber = Model.QueryOptions.pagenumber,
+                    TotalRecords = Model.Records,
+                    PageSize = Model.PageSize
+                };
+                @await Html.PartialAsync("~/Views/partials/list/_ListStat.cshtml", _listStat)
+            }
+
+            <table class="table table-order">
+                <tr>
+                    <th style="width: 70%;">
+                        <span class="ml10">@ForumResource["_threads"].Value</span>
+                    </th>
+                    <th style="width: 20%;">
+                        @ForumResource["_last_post"].Value;
+                    </th>
+                    <th style="width:5%;">
+                        @ForumResource["_replies"].Value;
+                    </th>
+                    <th style="width: 5%;">
+                        @GeneralResource["_views"].Value;
+                    </th>
+                </tr>
+                <tbody>
+                    @foreach (var topic in Model.Data)
+                    {
+                        <tr>
+                            <td>
+                                <a class="frm-head m-b-5" href="@Forum_Urls.Prepare_Topic_Url(topic.id, topic.title, false)">@topic.title</a>
+                                <br />
+                                <span class="frm-light">
+                                    by <a href="@UserUrlConfig.ProfileUrl(topic.author, registrationSettings.Value.uniqueFieldOption)">
+                                        @UserUrlConfig.PrepareUserName(topic.author, registrationSettings.Value.uniqueFieldOption)
+                                    </a>
+                                </span>
+
+                            </td>
+                            <td>
+                                @{
+                                    if (topic.lastpostuserid != "")
+                                    {
+                                        <span class="frm-light">
+                                            @UtilityBLL.Generate_Date((DateTime)topic.lastpostdate, 3);
+                                            @*<br />
+                                                by
+                                                <a href="@UserUrlConfig.ProfileUrl(topic.lastpostuserid)">@topic.author.firstname</a>*@
+                                        </span>
+                                    }
+                                }
+                            </td>
+                            <td style="width:10%;">
+                                @{
+                                    // replies
+                                    string _replies = "0";
+                                    if (topic.replies > 0)
+                                    {
+                                        _replies = string.Format("{0:#,###}", topic.replies);
+                                    }
+                                }
+                                @_replies
+                            </td>
+                            <td style="width: 30%;">
+
+                                @{
+                                    // views
+                                    string _views = "0";
+                                    if (topic.views > 0)
+                                    {
+                                        _views = string.Format("{0:#,###}", topic.views);
+                                    }
+                                }
+                                @_views
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+            // Pagination
+            if (Model.Records > Model.QueryOptions.pagesize)
+            {
+                var _paginationEntity = new PaginationViewModel()
+                {
+                    pagenumber = Model.QueryOptions.pagenumber,
+                    TotalRecords = Model.Records,
+                    PageSize = Model.QueryOptions.pagesize,
+                    Default_Url = Model.DefaultUrl,
+                    Pagination_Url = Model.PaginationUrl
+                };
+                @await Html.PartialAsync("~/Views/partials/list/_Pagination.cshtml", _paginationEntity)
+            }
+        }
+    }
+}

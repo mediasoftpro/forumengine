@@ -1,0 +1,84 @@
+﻿@inject IStringLocalizer<GeneralResource> GeneralResource
+@model Jugnoon.Forums.Models.PostTopicViewModel
+
+@if (Model.Message != null && Model.Message != "")
+{
+    @Html.Raw(Alerts.Prepare(Model.Message, Model.AlertType));
+}
+@if (Model.PostAccess)
+{
+    <form asp-controller="forums" asp-action="post" method="post">
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.UserName)
+        @Html.HiddenFor(m => m.GroupID)
+        @Html.HiddenFor(m => m.TopicID)
+        @Html.HiddenFor(m => m.ReplyID)
+        @Html.HiddenFor(m => m.isAdmin)
+        @Html.HiddenFor(m => m.PostAccess)
+        @Html.HiddenFor(m => m.showForumOption)
+        @Html.HiddenFor(m => m.showTitle)
+        @Html.HiddenFor(m => m.showTags)
+        @if (!Model.showForumOption)
+        {
+            @Html.HiddenFor(m => m.ForumID)
+        }
+        <div class="box">
+            @if (Model.HeadingTitle != "")
+            {
+                <h3 class="m-b-30">@Model.HeadingTitle</h3>
+            }
+
+            @if (Model.showTitle)
+            {
+                <div class="form-group">
+                    <label for="@Model.Title">
+                        @GeneralResource["_title"]:
+                    </label>
+                    @Html.TextBoxFor(m => m.Title, new { @class = "form-control", placeholder = GeneralResource["_enter_title"].Value })
+                    @Html.ValidationMessageFor(m => m.Title)
+                </div>
+            }
+
+            <div class="form-group">
+                <label class="sr-only">
+                    @GeneralResource["_detail"] :
+                </label>
+                @Html.TextAreaFor(model => model.Description, new { @id = "editor1", @class = "form-control", @rows = "12", placeholder = GeneralResource["_enter_detail"].Value })
+            </div>
+
+            @if (Model.showForumOption && Model.ReplyID == 0)
+            {
+                <div class="form-group">
+                    <label>
+                        @GeneralResource["_select"].Value :
+                    </label>
+                    @Html.DropDownListFor(m => m.ForumID, new SelectList(Model.ForumList, "forumid", "title"),
+                                                "-- " + GeneralResource["_select"] + " --",
+                                                new { @class = "form-control form-control-chosen" }
+                                                )
+
+                </div>
+            }
+            @if (Model.showTags)
+            {
+                <div class="form-group">
+                    <label>
+                        @GeneralResource["_tags"] :
+                    </label>
+                    @Html.TextBoxFor(m => m.Tags, new { @class = "form-control", placeholder = GeneralResource["_enter_tags"].Value })
+                </div>
+            }
+
+            <button class="btn btn-primary">@GeneralResource["_submit"].Value</button>
+        </div>
+    </form>
+
+
+}
+else
+{
+    @await Html.PartialAsync("~/Views/partials/utility/_norecord.cshtml", new NoRecordModelView() { Message = Model.PostMessage })
+}
+
+
+

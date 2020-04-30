@@ -604,25 +604,7 @@ namespace Jugnoon.Forums
         public static IQueryable<TopicUserEntity> processOptionalConditions(IQueryable<TopicUserEntity> collectionQuery, ForumTopicEntity query)
         {
             if (query.order != "")
-            {
-                var orderlist = query.order.Split(char.Parse(","));
-                foreach (var orderItem in orderlist)
-                {
-                    if (orderItem.Contains("asc") || orderItem.Contains("desc"))
-                    {
-                        var ordersplit = query.order.Split(char.Parse(" "));
-                        if (ordersplit.Length > 1)
-                        {
-                            collectionQuery = AddSortOption(collectionQuery, ordersplit[0], ordersplit[1]);
-                        }
-                    }
-                    else
-                    {
-                        collectionQuery = AddSortOption(collectionQuery, orderItem, "");
-                    }
-                }
-
-            }
+                collectionQuery = (IQueryable<TopicUserEntity>)collectionQuery.Sort(query.order);
             if (query.id > 0)
             {  
                 // validation check (if not set, it will return zero records that will make it difficult to debug the code)
@@ -639,15 +621,6 @@ namespace Jugnoon.Forums
             return collectionQuery;
         }
 
-        public static IQueryable<TopicUserEntity> AddSortOption(IQueryable<TopicUserEntity> collectionQuery, string field, string direction)
-        {
-            var reverse = false;
-            if (direction == "desc")
-                reverse = true;
-
-            return (IQueryable<TopicUserEntity>)collectionQuery.Sort(field, reverse);
-
-        }
         public static System.Linq.Expressions.Expression<Func<TopicUserEntity, bool>> returnWhereClause(ForumTopicEntity entity)
         {
             var where_clause = PredicateBuilder.New<TopicUserEntity>(true);

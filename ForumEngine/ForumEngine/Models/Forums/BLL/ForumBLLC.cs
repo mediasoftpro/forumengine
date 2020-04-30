@@ -213,25 +213,7 @@ namespace Jugnoon.Forums
         private static IQueryable<JGN_Forums> processOptionalConditions(IQueryable<JGN_Forums> collectionQuery, ForumEntity query)
         {
             if (query.order != "")
-            {
-                var orderlist = query.order.Split(char.Parse(","));
-                foreach (var orderItem in orderlist)
-                {
-                    if (orderItem.Contains("asc") || orderItem.Contains("desc"))
-                    {
-                        var ordersplit = query.order.Split(char.Parse(" "));
-                        if (ordersplit.Length > 1)
-                        {
-                            collectionQuery = AddSortOption(collectionQuery, ordersplit[0], ordersplit[1]);
-                        }
-                    }
-                    else
-                    {
-                        collectionQuery = AddSortOption(collectionQuery, orderItem, "");
-                    }
-                }
-
-            }
+                collectionQuery = (IQueryable<JGN_Forums>)collectionQuery.Sort(query.order);
 
             // skip logic
             if (query.id == 0)
@@ -251,14 +233,6 @@ namespace Jugnoon.Forums
             return collectionQuery;
         }
 
-        private static IQueryable<JGN_Forums> AddSortOption(IQueryable<JGN_Forums> collectionQuery, string field, string direction)
-        {
-            var reverse = false;
-            if (direction == "desc")
-                reverse = true;
-
-            return (IQueryable<JGN_Forums>)collectionQuery.Sort(field, reverse);
-        }
 
         private static System.Linq.Expressions.Expression<Func<JGN_Forums, bool>> returnWhereClause(ForumEntity entity)
         {

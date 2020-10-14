@@ -3,7 +3,7 @@ using Jugnoon.Utility;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
-namespace VideoEngine.Controllers
+namespace ForumEngine.Controllers
 {
     public class installationController : Controller
     {

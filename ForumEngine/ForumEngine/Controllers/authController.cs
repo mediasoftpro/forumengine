@@ -18,6 +18,7 @@ using Jugnoon.Services;
 using reCAPTCHA.AspNetCore;
 using Jugnoon.Localize;
 
+
 namespace ForumEngine.Controllers
 {
     public class authController : Controller
@@ -108,14 +109,15 @@ namespace ForumEngine.Controllers
                     UserName = model.Email;
                 }
 
-                var user = new ApplicationUser
+                 var user = new ApplicationUser
                 {
                     UserName = UserName,
                     Email = model.Email,
                     created_at = DateTime.Now,
                     firstname = model.FirstName,
                     lastname = model.LastName,
-                    isenabled = 1
+                    isenabled = 1,
+                    type = (byte)UserBLL.Types.NormalUser
                 };
                 var result = await SiteConfig.userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
@@ -245,7 +247,7 @@ namespace ForumEngine.Controllers
                     {
                         Directory_Process.CreateRequiredDirectories(dirPath);
                     }
-                    
+
                     if (returnUrl == null || returnUrl == "")
                         returnUrl = "/account/";
                     return Redirect(returnUrl); // LocalRedirect(returnUrl);

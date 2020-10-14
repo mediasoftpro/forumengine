@@ -1,186 +1,162 @@
 /* -------------------------------------------------------------------------- */
 /*                           Product Name: ForumEngine                        */
-/*                            Author: Mediasoftpro                            */
+/*                      Author: Mediasoftpro (Muhammad Irfan)                 */
 /*                       Email: support@mediasoftpro.com                      */
 /*       License: Read license.txt located on root of your application.       */
 /*                     Copyright 2007 - 2020 @Mediasoftpro                    */
 /* -------------------------------------------------------------------------- */
 
 import { Injectable } from "@angular/core";
-import { dispatch } from "@angular-redux/store";
-import { FluxStandardAction } from "flux-standard-action";
+import { Action } from "@ngrx/store";
 import { tassign } from "tassign";
 import { CoreService } from '../../admin/core/coreService';
 import { IForumTopicState } from "./model";
 
-type Payload = any;
-interface MetaData {}
-export type ForumTopicsAPIAction = FluxStandardAction<Payload, MetaData>;
+export enum ForumTopicsAPIAction {
+  LOAD_STARTED = "FORUMTOPICS_LOAD_STARTED",
+  LOAD_SUCCEEDED = "FORUMTOPICS_LOAD_SUCCEEDED",
+  LOAD_FAILED = "FORUMTOPICS_LOAD_FAILED",
+  APPLY_CHANGES = "FORUMTOPICS_APPLY_CHANGES",
+  APPLY_CHANGES_SUCCEEDED =
+    "FORUMTOPICS_APPLY_CHANGES_SUCCEEDED",
+  APPLY_CHANGES_FAILED = "FORUMTOPICS_APPLY_CHANGES_SUCCEEDED",
+  UPDATE_FILTER_OPTIONS = "FORUMTOPICS_UPDATE_FILTER_OPTIONS",
+  APPLY_FILTER = "FORUMTOPICS_APPLY_FILTER",
+  UPDATE_PAGINATION_CURRENTPAGE =
+    "FORUMTOPICS_UPDATE_PAGINATION_CURRENTPAGE",
+  UPDATE_CATEGORIES = "FORUMTOPICS_UPDATE_CATEGORIES",
 
-@Injectable()
-export class ForumTopicsAPIActions {
-  static readonly LOAD_STARTED = "FORUMTOPICS_LOAD_STARTED";
-  static readonly LOAD_SUCCEEDED = "FORUMTOPICS_LOAD_SUCCEEDED";
-  static readonly LOAD_FAILED = "FORUMTOPICS_LOAD_FAILED";
+  SELECT_ALL = "FORUMTOPICS_SELECT_ALL",
+  IS_ITEM_SELECTED = "FORUMTOPICS_IP_IS_ITEM_SELECTED",
 
-  static readonly APPLY_CHANGES = "FORUMTOPICS_APPLY_CHANGES";
-  static readonly APPLY_CHANGES_SUCCEEDED =
-    "FORUMTOPICS_APPLY_CHANGES_SUCCEEDED";
-  static readonly APPLY_CHANGES_FAILED = "FORUMTOPICS_APPLY_CHANGES_SUCCEEDED";
-
-  static readonly UPDATE_FILTER_OPTIONS = "FORUMTOPICS_UPDATE_FILTER_OPTIONS";
-  static readonly APPLY_FILTER = "FORUMTOPICS_APPLY_FILTER";
-  static readonly UPDATE_PAGINATION_CURRENTPAGE =
-    "FORUMTOPICS_UPDATE_PAGINATION_CURRENTPAGE";
-  static readonly UPDATE_CATEGORIES = "FORUMTOPICS_UPDATE_CATEGORIES";
-
-  static readonly SELECT_ALL = "FORUMTOPICS_SELECT_ALL";
-  static readonly IS_ITEM_SELECTED = "FORUMTOPICS_IP_IS_ITEM_SELECTED";
-
-  static readonly ADD_RECORD = "FORUMTOPICS_ADD_RECORD";
-  static readonly UPDATE_RECORD = "FORUMTOPICS_UPDATE_RECORD";
-  static readonly REMOVE_RECORD = "FORUMTOPICS_REMOVE_RECORD";
-  static readonly UPDATE_FORUM = "FORUMTOPICS_UPDATE_FORUM";
+  ADD_RECORD = "FORUMTOPICS_ADD_RECORD",
+  UPDATE_RECORD = "FORUMTOPICS_UPDATE_RECORD",
+  REMOVE_RECORD = "FORUMTOPICS_REMOVE_RECORD",
+  UPDATE_FORUM = "FORUMTOPICS_UPDATE_FORUM",
   // REFERESH LOAD
-  static readonly LOAD_END = "FORUMTOPICS_YT_LOADEND";
-  static readonly REFRESH_DATA = "FORUMTOPICS_REFRESH_DATA";
-  static readonly REFRESH_PAGINATION = "FORUMTOPICS_REFRESH_PAGINATION";
-  static readonly UPDATE_USER = "FORUMTOPICS_UPDATE_USER"; // update user info in filter options (to load logged in user data)
-  @dispatch()
-  loadStarted = (): ForumTopicsAPIAction => ({
-    type: ForumTopicsAPIActions.LOAD_STARTED,
-    // meta: { },
-    payload: null
-  });
-
-  @dispatch()
-  loadSucceeded = (payload: Payload): ForumTopicsAPIAction => ({
-    type: ForumTopicsAPIActions.LOAD_SUCCEEDED,
-    // meta: { },
-    payload
-  });
-
-  @dispatch()
-  loadFailed = (error): ForumTopicsAPIAction => ({
-    type: ForumTopicsAPIActions.LOAD_FAILED,
-    // meta: { },
-    payload: null,
-    error
-  });
-
-  @dispatch()
-  applyChanges = (payload: Payload): ForumTopicsAPIAction => ({
-    type: ForumTopicsAPIActions.APPLY_CHANGES,
-    // meta: { },
-    payload
-  });
-
-  @dispatch()
-  actionSucceeded = (payload: Payload): ForumTopicsAPIAction => ({
-    type: ForumTopicsAPIActions.APPLY_CHANGES_SUCCEEDED,
-    // meta: { },
-    payload: payload
-  });
-
-  @dispatch()
-  actionFailed = (error): ForumTopicsAPIAction => ({
-    type: ForumTopicsAPIActions.APPLY_CHANGES_SUCCEEDED,
-    // meta: { },
-    payload: null,
-    error
-  });
-
-  @dispatch()
-  updateFilterOptions = (payload: Payload): ForumTopicsAPIAction => ({
-    type: ForumTopicsAPIActions.UPDATE_FILTER_OPTIONS,
-    // meta: { },
-    payload: payload
-  });
-
-  @dispatch()
-  applyFilter = (payload: Payload): ForumTopicsAPIAction => ({
-    type: ForumTopicsAPIActions.APPLY_FILTER,
-    // meta: { },
-    payload: payload
-  });
-
-  @dispatch()
-  updatePaginationCurrentPage = (payload: Payload): ForumTopicsAPIAction => ({
-    type: ForumTopicsAPIActions.UPDATE_PAGINATION_CURRENTPAGE,
-    // meta: { },
-    payload: payload
-  });
-
-  @dispatch()
-  updateCategories = (payload: Payload): ForumTopicsAPIAction => ({
-    type: ForumTopicsAPIActions.UPDATE_CATEGORIES,
-    // meta: { },
-    payload: payload
-  });
-
-  @dispatch()
-  updateForums = (payload: Payload): ForumTopicsAPIAction => ({
-    type: ForumTopicsAPIActions.UPDATE_FORUM,
-    // meta: { },
-    payload: payload
-  });
-
-  @dispatch()
-  selectAll = (payload: Payload): ForumTopicsAPIAction => ({
-    type: ForumTopicsAPIActions.SELECT_ALL,
-    // meta: { },
-    payload: payload
-  });
-
-  @dispatch()
-  updateItemsSelectionStatus = (payload: Payload): ForumTopicsAPIAction => ({
-    type: ForumTopicsAPIActions.IS_ITEM_SELECTED,
-    // meta: { },
-    payload: payload
-  });
-
-  @dispatch()
-  addRecord = (payload: Payload): ForumTopicsAPIAction => ({
-    type: ForumTopicsAPIActions.ADD_RECORD,
-    // meta: { },
-    payload: payload
-  });
-
-  @dispatch()
-  updateRecord = (payload: Payload): ForumTopicsAPIAction => ({
-    type: ForumTopicsAPIActions.UPDATE_RECORD,
-    // meta: { },
-    payload: payload
-  });
-
-  @dispatch()
-  loadEnd = (): ForumTopicsAPIAction => ({
-    type: ForumTopicsAPIActions.LOAD_END,
-    // meta: { },
-    payload: null
-  });
-
-  @dispatch()
-  reloadList = (): ForumTopicsAPIAction => ({
-    type: ForumTopicsAPIActions.REFRESH_DATA,
-    // meta: { },
-    payload: null
-  });
-
-  @dispatch()
-  refresh_pagination = (payload: Payload): ForumTopicsAPIAction => ({
-    type: ForumTopicsAPIActions.REFRESH_PAGINATION,
-    // meta: { },
-    payload: payload
-  });
-
-  @dispatch()
-  updateFilter = (payload: Payload): ForumTopicsAPIAction => ({
-    type: ForumTopicsAPIActions.UPDATE_USER,
-    // meta: { },
-    payload: payload
-  });
+  LOAD_END = "FORUMTOPICS_YT_LOADEND",
+  REFRESH_DATA = "FORUMTOPICS_REFRESH_DATA",
+  REFRESH_PAGINATION = "FORUMTOPICS_REFRESH_PAGINATION",
+  UPDATE_USER = "FORUMTOPICS_UPDATE_USER"
 }
+
+export class loadStarted implements Action {
+  public readonly type = ForumTopicsAPIAction.LOAD_STARTED;
+  constructor(public payload: any) {}
+}
+
+export class loadSucceeded implements Action {
+  public readonly type = ForumTopicsAPIAction.LOAD_SUCCEEDED;
+  constructor(public payload: any) {}
+}
+
+export class loadFailed implements Action {
+  public readonly type = ForumTopicsAPIAction.LOAD_FAILED;
+  constructor(public payload: any) {}
+}
+
+export class applyChanges implements Action {
+  public readonly type = ForumTopicsAPIAction.APPLY_CHANGES;
+  constructor(public payload: any) {}
+}
+
+export class actionSucceeded implements Action {
+  public readonly type = ForumTopicsAPIAction.APPLY_CHANGES_SUCCEEDED;
+  constructor(public payload: any) {}
+}
+
+export class actionFailed implements Action {
+  public readonly type = ForumTopicsAPIAction.APPLY_CHANGES_FAILED;
+  constructor(public payload: any) {}
+}
+
+export class updateFilterOptions implements Action {
+  public readonly type = ForumTopicsAPIAction.UPDATE_FILTER_OPTIONS;
+  constructor(public payload: any) {}
+}
+
+export class applyFilter implements Action {
+  public readonly type = ForumTopicsAPIAction.APPLY_FILTER;
+  constructor(public payload: any) {}
+}
+
+export class updatePaginationCurrentPage implements Action {
+  public readonly type = ForumTopicsAPIAction.UPDATE_PAGINATION_CURRENTPAGE;
+  constructor(public payload: any) {}
+}
+
+export class updateCategories implements Action {
+  public readonly type = ForumTopicsAPIAction.UPDATE_CATEGORIES;
+  constructor(public payload: any) {}
+}
+
+export class updateForums implements Action {
+  public readonly type = ForumTopicsAPIAction.UPDATE_FORUM;
+  constructor(public payload: any) {}
+}
+
+export class selectAll implements Action {
+  public readonly type = ForumTopicsAPIAction.SELECT_ALL;
+  constructor(public payload: any) {}
+}
+
+export class updateItemsSelectionStatus implements Action {
+  public readonly type = ForumTopicsAPIAction.IS_ITEM_SELECTED;
+  constructor(public payload: any) {}
+}
+
+export class addRecord implements Action {
+  public readonly type = ForumTopicsAPIAction.ADD_RECORD;
+  constructor(public payload: any) {}
+}
+
+export class updateRecord implements Action {
+  public readonly type = ForumTopicsAPIAction.UPDATE_RECORD;
+  constructor(public payload: any) {}
+}
+
+export class loadEnd implements Action {
+  public readonly type = ForumTopicsAPIAction.LOAD_END;
+  constructor(public payload: any) {}
+}
+
+export class reloadList implements Action {
+  public readonly type = ForumTopicsAPIAction.REFRESH_DATA;
+  constructor(public payload: any) {}
+}
+
+export class refresh_pagination implements Action {
+  public readonly type = ForumTopicsAPIAction.REFRESH_PAGINATION;
+  constructor(public payload: any) {}
+}
+
+export class updateFilter implements Action {
+  public readonly type = ForumTopicsAPIAction.UPDATE_USER;
+  constructor(public payload: any) {}
+}
+
+
+export type ForumTopicsAPIActions =
+  | loadStarted
+  | loadSucceeded
+  | loadFailed
+  | applyChanges
+  | actionSucceeded
+  | actionFailed
+  | updateFilterOptions
+  | applyFilter
+  | updatePaginationCurrentPage
+  | updateCategories
+  | updateForums
+  | selectAll
+  | updateItemsSelectionStatus
+  | addRecord
+  | updateRecord
+  | loadEnd
+  | refresh_pagination
+  | reloadList
+  | refresh_pagination
+  | updateFilter;
 
 export class ForumsBLL {
   service = new CoreService();
@@ -191,12 +167,12 @@ export class ForumsBLL {
       }
     }
     // update totalrecords object in pagination prop
-    const _pagination = state.pagination;
+     const _pagination = Object.assign({}, state.pagination);
     _pagination.totalRecords = action.payload.records;
     _pagination.pageSize = state.filteroptions.pagesize;
     _pagination.currentPage = state.filteroptions.pagenumber;
     // avoid loading categories again in next call
-    const _filteroption = state.filteroptions;
+    const _filteroption= Object.assign({}, state.filteroptions);  
     _filteroption.loadstats = false;
 
     return tassign(state, {
@@ -211,7 +187,7 @@ export class ForumsBLL {
   }
 
   applyFilterChanges(state: IForumTopicState, action: any) {
-    const filters = state.filteroptions;
+   const filters = Object.assign({}, state.filteroptions);
     for (const prop in filters) {
       if (prop === action.payload.attr) {
         filters[prop] = action.payload.value;
@@ -224,7 +200,7 @@ export class ForumsBLL {
   }
 
   updatePagination(state: IForumTopicState, action: any) {
-    const pagination = state.pagination;
+     const pagination = Object.assign({}, state.pagination);
     pagination.currentPage = action.payload.currentpage;
 
     return tassign(state, {
@@ -233,7 +209,9 @@ export class ForumsBLL {
   }
 
   selectAll(state: IForumTopicState, action: any) {
-    const posts = state.posts;
+    const posts = state.posts.map((item) => {
+      return Object.assign({}, item);
+    });
     for (const item of posts) {
       item.Selected = action.payload;
     }
@@ -246,13 +224,17 @@ export class ForumsBLL {
   }
 
   addRecord(state: IForumTopicState, action: any) {
-    const posts = state.posts;
+    const posts = state.posts.map((item) => {
+      return Object.assign({}, item);
+    });
     posts.unshift(action.payload);
     return tassign(state, { posts: posts });
   }
 
   updateRecord(state: IForumTopicState, action: any) {
-    const posts = state.posts;
+    const posts = state.posts.map((item) => {
+      return Object.assign({}, item);
+    });
     for (let post of posts) {
       if (post.id === action.payload.id) {
         post = Object.assign({}, post, action.payload);
@@ -261,19 +243,10 @@ export class ForumsBLL {
     return tassign(state, { posts: Object.assign([], state.posts, posts) });
   }
 
-  /*  removeRecord(state: IForumTopicState, action: any) {
-      const posts = state.posts;
-      console.log('remove record');
-      console.log(action.payload);
-
-      if (action.payload.index > -1) {
-         posts.splice(action.payload.index, 1);
-      }
-      return tassign(state, { posts: Object.assign([], state.posts, posts) });
-  } */
-
   applyChanges(state: IForumTopicState, action: any) {
-    const _updated_state = state.posts;
+     const _updated_state = state.posts.map((item) => {
+      return Object.assign({}, item);
+    });
     for (const selected of action.payload.SelectedItems) {
       for (const item of _updated_state) {
         if (item.id === selected.id) {
@@ -293,13 +266,13 @@ export class ForumsBLL {
   }
 
   updateUserFilter(state: IForumTopicState, action: any) {
-    const filters = state.filteroptions;
+   const filters = Object.assign({}, state.filteroptions);
      filters.userid = action.payload.id; 
     return tassign(state, { filteroptions: filters });
   }
 
   refreshpagination(state: IForumTopicState, action: any) {
-    const pagination = state.pagination;
+    const pagination = Object.assign({}, state.pagination);
     pagination.totalRecords = action.payload.totalrecords;
     pagination.pageSize = action.payload.pagesize;
     return tassign(state, { pagination: pagination });

@@ -1,6 +1,6 @@
 /* -------------------------------------------------------------------------- */
 /*                           Product Name: ForumEngine                        */
-/*                            Author: Mediasoftpro                            */
+/*                      Author: Mediasoftpro (Muhammad Irfan)                 */
 /*                       Email: support@mediasoftpro.com                      */
 /*       License: Read license.txt located on root of your application.       */
 /*                     Copyright 2007 - 2020 @Mediasoftpro                    */
@@ -8,8 +8,8 @@
 
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { select } from "@angular-redux/store";
-import { Observable } from "rxjs/Observable";
+import { Store, select } from "@ngrx/store";
+import { IAppState } from "../../../reducers/store/model";
 
 // services
 import { SettingsService } from "../../../shared/forumtopics/services/settings.service";
@@ -18,10 +18,10 @@ import { FormService } from "../../../shared/forumtopics/services/form.service";
 
 // shared services
 import { CoreService } from "../../core/coreService";
-import { CoreAPIActions } from "../../../reducers/core/actions";
 
 // reducer actions
-import { ForumTopicsAPIActions } from "../../../reducers/forumtopics/actions";
+import { auth } from "../../../reducers/users/selectors";
+import { Notify } from "../../../reducers/core/actions";
 import { fadeInAnimation } from "../../../animations/core";
 
 import { PermissionService } from "../../../admin/users/services/permission.service";
@@ -34,11 +34,10 @@ import { PermissionService } from "../../../admin/users/services/permission.serv
 })
 export class ForumTopicsProfileComponent implements OnInit {
   constructor(
+    private _store: Store<IAppState>,
     private settingService: SettingsService,
     private dataService: DataService,
     private coreService: CoreService,
-    private coreActions: CoreAPIActions,
-    private actions: ForumTopicsAPIActions,
     private route: ActivatedRoute,
     private formService: FormService,
     private permission: PermissionService,
@@ -60,8 +59,7 @@ export class ForumTopicsProfileComponent implements OnInit {
   SelectedItems: any = [];
   Author_FullName = "";
 
-  @select(["users", "auth"])
-  readonly auth$: Observable<any>;
+  readonly auth$ = this._store.pipe(select(auth));
 
   // permission logic
   isAccessGranted = false; // Granc access on resource that can be full access or read only access with no action rights
@@ -109,11 +107,11 @@ export class ForumTopicsProfileComponent implements OnInit {
     this.showLoader = true;
     this.dataService.GetInfo(this.RecordID).subscribe((data: any) => {
       if (data.status === "error") {
-        this.coreActions.Notify({
+        this._store.dispatch(new Notify({
           title: data.message,
           text: "",
           css: "bg-success"
-        });
+        }));
         // redirect to main page
         this.router.navigate(["/forumtopics"]);
       } else {
@@ -143,11 +141,11 @@ export class ForumTopicsProfileComponent implements OnInit {
 
   ProcessActions(selection: any) {
     if (!this.isActionGranded) {
-      this.coreActions.Notify({
+     this._store.dispatch(new Notify({
         title: "Permission Denied",
         text: "",
         css: "bg-danger"
-      });
+      }));
       return;
     }
     if (this.SelectedItems.length > 0) {

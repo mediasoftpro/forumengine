@@ -21,7 +21,7 @@ const routes: Routes = [
     path: "",
     data: {
       topmenuIndex: NavigationMenuIndex.TOPMENU_FORUMS_INDEX,
-      leftmenuIndex: NavigationMenuIndex.FORUM_TOPICS_INDEX,
+      leftmenuIndex: NavigationMenuIndex.TOPMENU_FORUMS_INDEX,
       title: "My Account",
       urls: [{ title: "My Account", url: "/" }, { title: "Manage Topics" }]
     },
@@ -31,7 +31,7 @@ const routes: Routes = [
     path: "process/:id",
     data: {
       topmenuIndex: NavigationMenuIndex.TOPMENU_FORUMS_INDEX,
-      leftmenuIndex: NavigationMenuIndex.FORUM_TOPICS_INDEX,
+      leftmenuIndex: NavigationMenuIndex.TOPMENU_FORUMS_INDEX,
       title: "My Account",
       urls: [
         { title: "My Account", url: "/" },

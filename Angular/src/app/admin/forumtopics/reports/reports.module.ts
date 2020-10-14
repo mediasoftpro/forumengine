@@ -1,6 +1,6 @@
 /* -------------------------------------------------------------------------- */
 /*                           Product Name: ForumEngine                        */
-/*                            Author: Mediasoftpro                            */
+/*                      Author: Mediasoftpro (Muhammad Irfan)                 */
 /*                       Email: support@mediasoftpro.com                      */
 /*       License: Read license.txt located on root of your application.       */
 /*                     Copyright 2007 - 2020 @Mediasoftpro                    */
@@ -19,7 +19,6 @@ import { DataService } from "../../../shared/forumtopics/services/data.service";
 import { FormService } from "../../../shared/forumtopics/services/form.service";
 
 /* actions */
-import { ForumTopicsAPIActions } from "../../../reducers/forumtopics/actions";
 import { PartialModule } from "../../../partials/shared.module";
 
 import { Ng2GoogleChartsModule } from "ng2-google-charts";
@@ -34,6 +33,6 @@ import { Ng2GoogleChartsModule } from "ng2-google-charts";
   ],
   declarations: [ForumTopicsReportsComponent],
   exports: [ForumTopicsReportsComponent],
-  providers: [SettingsService, DataService, FormService, ForumTopicsAPIActions]
+  providers: [SettingsService, DataService, FormService]
 })
 export class ForumTopicReportModule {}

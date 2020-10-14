@@ -1,8 +1,11 @@
+import { Store, select } from "@ngrx/store";
+import { IAppState } from "../../../../reducers/store/model";
+
 import { Component, OnInit, Input } from "@angular/core";
 import { FormService } from "../../services/form.service";
 import { DataService } from "../../services/data.service";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
-import { CoreAPIActions } from "../../../../reducers/core/actions";
+import { Notify } from "../../../../reducers/core/actions";
 
 @Component({
   selector: "viewmodal",
@@ -20,10 +23,10 @@ export class ViewComponent implements OnInit {
 
   list: any[] = [];
   constructor(
+    private _store: Store<IAppState>,
     public activeModal: NgbActiveModal,
     private service: FormService,
-    private dataService: DataService,
-    private coreActions: CoreAPIActions
+    private dataService: DataService
   ) {}
 
   ngOnInit() {
@@ -35,11 +38,11 @@ export class ViewComponent implements OnInit {
     // permission check
     if (this.Info.isActionGranded !== undefined) {
       if (!this.Info.isActionGranded) {
-        this.coreActions.Notify({
+        this._store.dispatch(new Notify({
           title: "Permission Denied",
           text: "",
           css: "bg-danger"
-        });
+        }));
         return;
       }
     }
@@ -54,21 +57,20 @@ export class ViewComponent implements OnInit {
       _status = "Updated";
     }
     this.showLoader = true;
-    console.log(payload);
     this.dataService.AddRecord(payload).subscribe(
       (data: any) => {
         if (data.status === "error") {
-          this.coreActions.Notify({
-            title: data.message,
-            text: "",
-            css: "bg-error"
-          });
+           this._store.dispatch(new Notify({
+          title: data.message,
+          text: "",
+          css: "bg-danger"
+        }));
         } else {
-          this.coreActions.Notify({
+         this._store.dispatch(new Notify({
             title: "Record " + _status + " Successfully",
             text: "",
             css: "bg-success"
-          });
+          }));
 
           this.activeModal.close({
             data: data.record,
@@ -79,11 +81,11 @@ export class ViewComponent implements OnInit {
       },
       err => {
         this.showLoader = false;
-        this.coreActions.Notify({
+         this._store.dispatch(new Notify({
           title: "Error Occured",
           text: "",
           css: "bg-danger"
-        });
+        }));
       }
     );
   }

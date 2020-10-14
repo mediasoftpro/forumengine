@@ -100,7 +100,6 @@ namespace Jugnoon.BLL
         {
             if (query.order != "")
                 collectionQuery = (IQueryable<JGN_BlockIP>)collectionQuery.Sort(query.order);
-
             if (query.id == 0)
             {
                 // skip logic

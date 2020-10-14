@@ -98,7 +98,6 @@ namespace Jugnoon.BLL
         {
             if (query.order != "")
                 collectionQuery = (IQueryable<JGN_RoleObjects>)collectionQuery.Sort(query.order);
-
             // skip logic
             if (query.pagenumber > 1)
                 collectionQuery = collectionQuery.Skip(query.pagesize * (query.pagenumber - 1));

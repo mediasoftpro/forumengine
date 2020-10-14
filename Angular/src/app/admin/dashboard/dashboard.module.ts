@@ -1,6 +1,6 @@
 /* -------------------------------------------------------------------------- */
-/*                           Product Name: ForumEngine                        */
-/*                            Author: Mediasoftpro                            */
+/*                          Product Name: ForumEngine                         */
+/*                      Author: Mediasoftpro (Muhammad Irfan)                 */
 /*                       Email: support@mediasoftpro.com                      */
 /*       License: Read license.txt located on root of your application.       */
 /*                     Copyright 2007 - 2020 @Mediasoftpro                    */
@@ -21,11 +21,17 @@ import { PartialModule } from "../../partials/shared.module";
 // search navigation
 import { SearchComponent } from './search/search-app';
 import { ForumSearchComponent } from './search/forums/forums.component';
+import { BlogSearchComponent } from './search/blogs/blogs.component';
+import { UsersSearchComponent } from './search/users/users.component';
 import { NavigationComponent } from "./search/partials/navigation.component"
 // search list modules
+
 import { SharedForumModule } from "../../shared/forumtopics/shared.module";
+import { SharedBlogModule } from "../../shared/blogs/shared.module";
 import { SharedUsersModule } from "../../admin/users/shared.module";
 import { NavigationMenuIndex } from "../../configs/settings";
+
+
 const routes: Routes = [
   {
     path: '',
@@ -41,13 +47,13 @@ const routes: Routes = [
   }
 ];
 
-
 @NgModule({
   imports: [
     FormsModule,
     CommonModule,
     PartialModule,
     SharedForumModule,
+    SharedBlogModule,
     SharedUsersModule,
     RouterModule.forChild(routes)
   ],
@@ -58,7 +64,9 @@ const routes: Routes = [
     SetupDashboardComponent,
     SearchComponent,
     NavigationComponent,
-    ForumSearchComponent
+    ForumSearchComponent,
+    BlogSearchComponent,
+    UsersSearchComponent
   ]
 })
 export class DashboardModule {}

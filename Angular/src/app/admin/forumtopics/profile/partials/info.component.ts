@@ -1,14 +1,14 @@
 /* -------------------------------------------------------------------------- */
 /*                           Product Name: ForumEngine                        */
-/*                            Author: Mediasoftpro                            */
+/*                      Author: Mediasoftpro (Muhammad Irfan)                 */
 /*                       Email: support@mediasoftpro.com                      */
 /*       License: Read license.txt located on root of your application.       */
 /*                     Copyright 2007 - 2020 @Mediasoftpro                    */
 /* -------------------------------------------------------------------------- */
 
 import { Component, Input, OnInit } from "@angular/core";
-import { select } from "@angular-redux/store";
-import { Observable } from "rxjs/Observable";
+import { Store, select } from "@ngrx/store";
+import { IAppState } from "../../../../reducers/store/model";
 
 /* modal popup */
 import { NgbModal, NgbModalOptions } from "@ng-bootstrap/ng-bootstrap";
@@ -16,23 +16,27 @@ import { NgbModal, NgbModalOptions } from "@ng-bootstrap/ng-bootstrap";
 import { ViewComponent } from "../../../../shared/forumtopics/components/partials/modal.component";
 import { SettingsService } from "../../../../shared/forumtopics/services/settings.service";
 import { DataService } from "../../../../shared/forumtopics/services/data.service";
-
+import { auth } from "../../../../reducers/users/selectors";
 @Component({
   selector: "app-forumtopics-info",
   templateUrl: "./info.html"
 })
 export class ForumTopicsProfileInfoComponent implements OnInit {
-  @select(["users", "auth"])
-  readonly auth$: Observable<any>;
+ 
 
   constructor(
+    private _store: Store<IAppState>,
     private modalService: NgbModal,
     private settingService: SettingsService,
     private dataService: DataService
   ) {}
 
+
+  readonly auth$ = this._store.pipe(select(auth));
+
   @Input() Info: any = {};
   @Input() Author_FullName = "";
+  
   Auth: any = {};
 
   ngOnInit() {

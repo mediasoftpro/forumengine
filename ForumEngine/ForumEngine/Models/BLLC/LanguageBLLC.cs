@@ -198,7 +198,6 @@ namespace Jugnoon.BLL
         {
             if (query.order != "")
                 collectionQuery = (IQueryable<JGN_Languages>)collectionQuery.Sort(query.order);
-
             if (query.id == 0)
             {
                 // skip logic
@@ -303,6 +302,50 @@ namespace Jugnoon.BLL
                     break;
             }
             return css;
+        }
+        public static string returnTwoDigitCultureName(string culturename, List<JGN_Languages> _lst)
+        {
+            var value = "en";
+            switch (culturename)
+            {
+                case "en":
+                    value = "en";
+                    break;
+                case "en-US":
+                    value = "en";
+                    break;
+                case "ar-SA":
+                    value = "ar";
+                    break;
+                case "de-DE":
+                    value = "de";
+                    break;
+                case "es-ES":
+                    value = "es";
+                    break;
+                case "fr-FR":
+                    value = "fr";
+                    break;
+                case "it-IT":
+                    value = "it";
+                    break;
+                case "ja-JP":
+                    value = "ja";
+                    break;
+                case "pt-BR":
+                    value = "br";
+                    break;
+                case "ru-RU":
+                    value = "ru";
+                    break;
+                case "tr-TR":
+                    value = "tr";
+                    break;
+                case "zh-CHS":
+                    value = "zh";
+                    break;
+            }
+            return value;
         }
 
         public static string returnLanguage(string culturename, List<JGN_Languages> _lst)

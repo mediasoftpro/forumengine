@@ -1,6 +1,6 @@
 /* -------------------------------------------------------------------------- */
 /*                           Product Name: ForumEngine                        */
-/*                            Author: Mediasoftpro                            */
+/*                      Author: Mediasoftpro (Muhammad Irfan)                 */
 /*                       Email: support@mediasoftpro.com                      */
 /*       License: Read license.txt located on root of your application.       */
 /*                     Copyright 2007 - 2020 @Mediasoftpro                    */
@@ -21,14 +21,15 @@ import { ForumInfoComponent } from "./components/partials/foruminfo.component";
 import { ViewComponent } from "./components/partials/modal.component";
 import { SMForumListComponent } from "./components/partials/smlist.component";
 import { ListComponent } from "./components/partials/list.component";
-
+import { SMTopicsAdminListComponent } from "./components/partials/smlist_admin.component";
+import { SMTopicsReportComponent } from "./components/partials/sm_report.component";
 // services
 import { SettingsService } from "./services/settings.service";
 import { DataService } from "./services/data.service";
 import { FormService } from "./services/form.service";
 
 /* actions */
-import { ForumTopicsAPIActions } from "../../reducers/forumtopics/actions";
+import { Ng2GoogleChartsModule } from "ng2-google-charts";
 
 @NgModule({
   imports: [
@@ -36,7 +37,8 @@ import { ForumTopicsAPIActions } from "../../reducers/forumtopics/actions";
     PartialModule,
     RouterModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    Ng2GoogleChartsModule
   ],
   declarations: [
     MainForumTopicsComponent,
@@ -44,7 +46,9 @@ import { ForumTopicsAPIActions } from "../../reducers/forumtopics/actions";
     ForumInfoComponent,
     ViewComponent,
     SMForumListComponent,
-    ListComponent
+    ListComponent,
+    SMTopicsAdminListComponent,
+    SMTopicsReportComponent
   ],
   exports: [
     MainForumTopicsComponent,
@@ -52,9 +56,11 @@ import { ForumTopicsAPIActions } from "../../reducers/forumtopics/actions";
     ForumInfoComponent,
     ViewComponent,
     SMForumListComponent,
-    ListComponent
+    ListComponent,
+    SMTopicsAdminListComponent,
+    SMTopicsReportComponent
   ],
   entryComponents: [ViewComponent],
-  providers: [SettingsService, DataService, FormService, ForumTopicsAPIActions]
+  providers: [SettingsService, DataService, FormService]
 })
 export class SharedForumModule {}

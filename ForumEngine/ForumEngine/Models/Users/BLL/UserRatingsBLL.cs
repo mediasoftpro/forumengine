@@ -15,7 +15,7 @@ namespace Jugnoon.BLL
         // ........... video | audio,  0: liked, 1: disliked
         public enum Types
         {
-            Videos = 0,
+            Classified = 110,
         };
 
         public enum Ratings

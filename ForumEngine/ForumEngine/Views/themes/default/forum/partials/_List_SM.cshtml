@@ -1,0 +1,50 @@
+﻿@using Jugnoon.Forums
+@using Jugnoon.Forums.Models
+@inject IStringLocalizer<GeneralResource> GeneralResource
+@model Jugnoon.Forums.Models.ForumTopicsListViewModel
+@inject Jugnoon.Framework.ApplicationDbContext _context
+@inject Microsoft.Extensions.Options.IOptions<Jugnoon.Settings.Features> featureSettings
+@inject Microsoft.Extensions.Options.IOptions<Jugnoon.Settings.Registration> registrationSettings
+@if (featureSettings.Value.enable_forums)
+{
+
+    var _list = await ForumTopicBLL.LoadItems(_context, Model.QueryOptions);
+    if (_list.Count > 0)
+    {
+        var PartialPath = "~/Views/themes/default/forum/partials";
+
+        <div class="box">
+            <h3 class="m-b-10">
+                @Model.HeadingTitle
+                @{
+                    if (Model.BrowseUrl != "")
+                    {
+                        <small><a href="@Model.BrowseUrl">@Model.BrowseText</a></small>
+                    }
+                }
+            </h3>
+
+            <hr />
+            <div class="row">
+                @foreach (var Item in _list)
+                {
+                    @await Html.PartialAsync(PartialPath + "/item/Item.cshtml", new ForumItemViewModel()
+                    {
+                       Data = Item,
+                       ListObject = Model.ListObject,
+                       AuthorUrl = UserUrlConfig.ProfileUrl(Item.author, registrationSettings.Value.uniqueFieldOption),
+                       ProfileUrl = Forum_Urls.Prepare_Topic_Url(Item.id, Item.title, false)
+                    })  ;
+                }
+            </div>
+
+        </div>
+
+    }
+    else
+    {
+        @await Html.PartialAsync("~/Views/partials/utility/_norecord.cshtml", new NoRecordModelView() { Message = Model.NoRecordFoundText })
+    }
+}
+
+

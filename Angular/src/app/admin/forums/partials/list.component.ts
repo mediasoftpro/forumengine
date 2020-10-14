@@ -1,16 +1,20 @@
 
 /* -------------------------------------------------------------------------- */
 /*                           Product Name: ForumEngine                        */
-/*                            Author: Mediasoftpro                            */
+/*                      Author: Mediasoftpro (Muhammad Irfan)                 */
 /*                       Email: support@mediasoftpro.com                      */
 /*       License: Read license.txt located on root of your application.       */
 /*                     Copyright 2007 - 2020 @Mediasoftpro                    */
 /* -------------------------------------------------------------------------- */
 
 import { Component, OnInit, EventEmitter, Input, Output } from "@angular/core";
-import { Observable } from "rxjs/Observable";
-import { select } from "@angular-redux/store";
-import { ForumsAPIActions } from "../../../reducers/forums/actions";
+
+import { Store, select } from "@ngrx/store";
+import { IAppState } from "../../../reducers/store/model";
+import * as selectors from "../../../reducers/forums/selectors";
+import { applyFilter, updatePaginationCurrentPage, selectAll} from "../../../reducers/forums/actions";
+import { Notify } from "../../../reducers/core/actions";
+
 import { DataService } from "../services/data.service";
 import {
   trigger,
@@ -43,45 +47,31 @@ import { CoreAPIActions } from "../../../reducers/core/actions";
 })
 export class ListComponent implements OnInit {
   constructor(
-    private actions: ForumsAPIActions,
+    private _store: Store<IAppState>,
     private dataService: DataService,
     private coreActions: CoreAPIActions,
     private router: Router
   ) {}
 
   @Input() isActionGranded = false;
-  @select(["forums", "posts"])
-  readonly Data$: Observable<any>;
 
-  @select(["forums", "loading"])
-  readonly loading$: Observable<boolean>;
-
-  @select(["forums", "pagination"])
-  readonly pagination$: Observable<any>;
-
-  @select(["forums", "selectall"])
-  readonly selectAll$: Observable<any>;
+  readonly Data$ = this._store.pipe(select(selectors.posts));
+  readonly loading$ = this._store.pipe(select(selectors.loading));
+  readonly pagination$ = this._store.pipe(select(selectors.pagination));
+  readonly selectAll$ = this._store.pipe(select(selectors.selectall));
+  
 
   @Output() View = new EventEmitter<any>();
   @Output() SelectedItems = new EventEmitter<any>();
 
-  sortedFields: any = {
-    ipaddress: {
-      sort: "ipaddress",
-      direction: "desc"
-    },
-    created_at: {
-      sort: "created_at",
-      direction: "desc"
-    }
-  };
   selectall = false;
-  fieldstates = {
-    ipaddress: false,
-    created_at: false
-  };
-
+  Data: any = [];
   ngOnInit() {
+    this.Data$.subscribe((data: any) => {
+      this.Data = data.map(item => {
+        return Object.assign({}, item);
+      });
+    });
     this.selectAll$.subscribe((selectall: boolean) => {
       this.selectall = selectall;
       this.checkChange();
@@ -95,58 +85,28 @@ export class ListComponent implements OnInit {
 
   editRecord(obj, event) {
     if (!this.isActionGranded) {
-      this.coreActions.Notify({
+     this._store.dispatch(new Notify({
         title: "Permission Denied",
         text: "",
         css: "bg-danger"
-      });
+      }));
       return;
     }
     this.router.navigate(["/forums/process/" + obj.id]);
     event.stopPropagation();
   }
-  Sort(field: string) {
-    if (this.sortedFields[field] === undefined) {
-      this.sortedFields[field] = {
-        sort: field,
-        direction: "desc"
-      };
-    } else {
-      if (this.sortedFields[field].direction === "desc") {
-        this.sortedFields[field].direction = "asc";
-      } else {
-        this.sortedFields[field].direction = "desc";
-      }
-    }
-
-    for (const st in this.fieldstates) {
-      if (st === field) {
-        this.fieldstates[st] = true;
-      } else {
-        this.fieldstates[st] = false;
-      }
-    }
-    console.log(this.fieldstates);
-    // update filter
-    this.actions.applyFilter({
-      attr: "order",
-      value:
-        this.sortedFields[field].sort + " " + this.sortedFields[field].direction
-    });
-  }
-  // Since we're observing an array of items, we need to set up a 'trackBy'
-  // parameter so Angular doesn't tear down and rebuild the list's DOM every
-  // time there's an update.
+ 
   getKey(_, item: any) {
     return item.id;
   }
+
   delete(item: any, index: number, event) {
     if (!this.isActionGranded) {
-      this.coreActions.Notify({
+     this._store.dispatch(new Notify({
         title: "Permission Denied",
         text: "",
         css: "bg-danger"
-      });
+      }));
       return;
     }
     const r = confirm("Are you sure you want to delete selected record?");
@@ -157,25 +117,22 @@ export class ListComponent implements OnInit {
   /* pagination click event */
   PaginationChange(value: number) {
     // update filter option to query database
-    this.actions.applyFilter({ attr: "pagenumber", value: value });
+    this._store.dispatch(new applyFilter({ attr: "pagenumber", value: value }));
     // update pagination current page (to hightlight selected page)
-    this.actions.updatePaginationCurrentPage({ currentpage: value });
+    this._store.dispatch(new updatePaginationCurrentPage({ currentpage: value }));
   }
 
   processChange() {
-    this.actions.selectAll(this.selectall);
+    this._store.dispatch(new selectAll(this.selectall));
   }
 
   checkChange() {
-    this.Data$.subscribe(items => {
-      const _items = [];
-      for (const item of items) {
-        if (item.Selected) {
-          _items.push(item);
-        }
+    const _items = [];
+    for (const item of this.Data) {
+      if (item.Selected) {
+        _items.push(item);
       }
-
-      this.SelectedItems.emit(_items);
-    });
+    }
+    this.SelectedItems.emit(_items);
   }
 }

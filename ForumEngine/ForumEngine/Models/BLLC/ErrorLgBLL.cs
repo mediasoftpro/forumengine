@@ -94,7 +94,6 @@ namespace Jugnoon.BLL
         {
             if (query.order != "")
                 collectionQuery = (IQueryable<JGN_Log>)collectionQuery.Sort(query.order);
-
             if (query.id == 0)
             {
                 // skip logic

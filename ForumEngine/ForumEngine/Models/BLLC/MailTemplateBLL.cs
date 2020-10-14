@@ -19,7 +19,8 @@ namespace Jugnoon.BLL
     {
         General = 0,
         Members = 1,
-        Forums = 7
+        Blogs = 8,
+        Classified = 10
     };
 
     public class MailTemplateBLL
@@ -190,7 +191,6 @@ namespace Jugnoon.BLL
         {
             if (query.order != "")
                 collectionQuery = (IQueryable<JGN_MailTemplates>)collectionQuery.Sort(query.order);
-
             if (query.id == 0)
             {
                 // skip logic

@@ -1,6 +1,6 @@
 /* -------------------------------------------------------------------------- */
 /*                           Product Name: ForumEngine                        */
-/*                            Author: Mediasoftpro                            */
+/*                      Author: Mediasoftpro (Muhammad Irfan)                 */
 /*                       Email: support@mediasoftpro.com                      */
 /*       License: Read license.txt located on root of your application.       */
 /*                     Copyright 2007 - 2020 @Mediasoftpro                    */
@@ -8,8 +8,8 @@
 
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { select } from "@angular-redux/store";
-import { Observable } from "rxjs/Observable";
+import { Store, select } from "@ngrx/store";
+import { IAppState } from "../../../reducers/store/model";
 
 // services
 import { SettingsService } from "../services/settings.service";
@@ -21,10 +21,15 @@ import { CoreService } from "../../core/coreService";
 import { CoreAPIActions } from "../../../reducers/core/actions";
 
 // reducer actions
-import { ForumsAPIActions } from "../../../reducers/forums/actions";
+import * as forumsSelectors from "../../../reducers/forums/selectors";
+import { reloadList, } from "../../../reducers/forums/actions";
+import { Notify } from "../../../reducers/core/actions";
+import {auth} from "../../../reducers/users/selectors";
+
 import { fadeInAnimation } from "../../../animations/core";
 
 import { PermissionService } from "../../../admin/users/services/permission.service";
+
 
 @Component({
   templateUrl: "./process.html",
@@ -32,12 +37,13 @@ import { PermissionService } from "../../../admin/users/services/permission.serv
   animations: [fadeInAnimation]
 })
 export class ForumProcessComponent implements OnInit {
+
   constructor(
+    private _store: Store<IAppState>,
     private settingService: SettingsService,
     private dataService: DataService,
     private coreService: CoreService,
     private coreActions: CoreAPIActions,
-    private actions: ForumsAPIActions,
     private route: ActivatedRoute,
     private formService: FormService,
     private permission: PermissionService,
@@ -54,14 +60,10 @@ export class ForumProcessComponent implements OnInit {
   IsLoaded = false;
   Categories: any = [];
 
-  @select(["forums", "categories"])
-  readonly categories$: Observable<any>;
-
-  @select(["forums", "isloaded"])
-  readonly isloaded$: Observable<any>;
-
-  @select(["users", "auth"])
-  readonly auth$: Observable<any>;
+  
+  readonly categories$ = this._store.pipe(select(forumsSelectors.categories));
+  readonly isloaded$ = this._store.pipe(select(forumsSelectors.isloaded));
+  readonly auth$ = this._store.pipe(select(auth));
 
   // permission logic
   isAccessGranted = false; // Granc access on resource that can be full access or read only access with no action rights
@@ -126,11 +128,12 @@ export class ForumProcessComponent implements OnInit {
         // update post
         this.initializeControls(data.post);
       } else {
-        this.coreActions.Notify({
+        this._store.dispatch(new Notify({
           title: data.message,
           text: "",
-          css: "bg-error"
-        });
+          css: "bg-danger"
+        }));
+      
         this.initializeControls(this.settingService.getInitObject());
       }
       this.showLoader = false;
@@ -147,11 +150,11 @@ export class ForumProcessComponent implements OnInit {
 
   SubmitForm(payload) {
     if (!this.isActionGranded) {
-      this.coreActions.Notify({
+     this._store.dispatch(new Notify({
         title: "Permission Denied",
         text: "",
         css: "bg-danger"
-      });
+      }));
       return;
     }
     this.showLoader = true;
@@ -166,20 +169,20 @@ export class ForumProcessComponent implements OnInit {
     this.dataService.AddRecord(payload).subscribe(
       (data: any) => {
         if (data.status === "error") {
-          this.coreActions.Notify({
-            title: data.message,
-            text: "",
-            css: "bg-error"
-          });
+           this._store.dispatch(new Notify({
+          title: data.message,
+          text: "",
+          css: "bg-danger"
+        }));
         } else {
-          this.coreActions.Notify({
+          this._store.dispatch(new Notify({
             title: "Record " + _status + " Successfully",
             text: "",
             css: "bg-success"
-          });
-
+          }));
+         
           // enable reload action to refresh data
-          this.actions.reloadList();
+          this._store.dispatch(new reloadList({}));
 
           // redirect
           this.router.navigate(["/forums/"]);
@@ -188,11 +191,12 @@ export class ForumProcessComponent implements OnInit {
       },
       err => {
         this.showLoader = false;
-        this.coreActions.Notify({
+        this._store.dispatch(new Notify({
           title: "Error Occured",
           text: "",
           css: "bg-danger"
-        });
+        }));
+      
       }
     );
   }

@@ -20,6 +20,7 @@ namespace Jugnoon.BLL
             await UserStatsBLL.Add(context, new JGN_User_Stats() { userid = entity.Id });
             // Initialize User Settings
             await UserSettingsBLL.Add(context, new JGN_User_Settings() { userid = entity.Id, isemail = 1, issendmessages = 1 }); // activate both isemail / issendmessages enabled until having custom requirements.
+
         }
 
         public static async Task DropUserProfile(ApplicationDbContext context, ApplicationUser entity)
@@ -28,12 +29,14 @@ namespace Jugnoon.BLL
             await UserStatsBLL.Delete(context, entity.Id);
             // Delete User Settings
             await UserSettingsBLL.Delete(context, entity.Id);
+          
         }
     
         public static Task<List<ApplicationUser>> LoadItems(ApplicationDbContext context, MemberEntity entity)
         {
-            return Return_NormalList(context, entity);
+              return Return_NormalList(context, entity);
         }
+
 
         /// <summary>
         /// List data designed for normal content listing purpose
@@ -60,10 +63,13 @@ namespace Jugnoon.BLL
                       last_login = p.user.last_login,
                       type = p.user.type,
                       roleid = p.user.roleid,
+                      mobile = p.user.mobile,
+                      PhoneNumber = p.user.PhoneNumber,
                       stats = new JGN_User_Stats()
                       {
-                          stat_forum_topics = p.stats.stat_forum_topics
+                          stat_forum_topics = p.stats.stat_forum_topics,
                       },
+                      
                       settings = new JGN_User_Settings()
                       {
                           isemail = p.settings.isemail,
@@ -76,6 +82,7 @@ namespace Jugnoon.BLL
             return prepareQuery(context, entity).CountAsync();
         }
 
+
         private static IQueryable<UserProfileEntity> prepareQuery(ApplicationDbContext context, MemberEntity entity)
         {
             return context.AspNetusers
@@ -87,8 +94,8 @@ namespace Jugnoon.BLL
                  settings => settings.userid, (user, settings) => new UserProfileEntity
                  {
                      user = user.user,
-                     stats = user.user.stats,
-                     settings = settings,
+                     stats = user.stats,
+                     settings = settings
                  })
              .Where(returnWhereClause(entity));
         }
@@ -138,6 +145,8 @@ namespace Jugnoon.BLL
                 where_clause = where_clause.And(p => p.user.UserName == entity.username);
             if (entity.userid != "")
                 where_clause = where_clause.And(p => p.user.Id == entity.userid);
+
+
             return where_clause;
         }
 
@@ -159,6 +168,7 @@ namespace Jugnoon.BLL
         public ApplicationUser user { get; set; }
         public JGN_User_Settings settings { get; set; }
         public JGN_User_Stats stats { get; set; }
+       
     }
 }
 

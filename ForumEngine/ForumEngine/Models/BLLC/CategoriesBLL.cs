@@ -20,10 +20,11 @@ namespace Jugnoon.BLL
     public class CategoryBLL
     {
         public enum Types
-        {          
+        {
+            Blogs = 6,
             General = 3,
             AbuseReport = 4,
-            Forum = 12,
+            Forum = 12
         };
 
 
@@ -267,6 +268,7 @@ namespace Jugnoon.BLL
 
         public static IQueryable<JGN_Categories> processOptionalConditions(IQueryable<JGN_Categories> collectionQuery, CategoryEntity query)
         {
+
             if (query.order != "")
                 collectionQuery = (IQueryable<JGN_Categories>)collectionQuery.Sort(query.order);
 

@@ -17,6 +17,7 @@ namespace Jugnoon.Utility
         public static RoleManager<ApplicationRole> roleManager { get; set; }
         public static IStringLocalizer<GeneralResource> generalLocalizer { get; set; }
         public static IStringLocalizer<ForumResource> forumLocalizer { get; set; }
+        public static IStringLocalizer<BlogResource> blogLocalizer { get; set; }
         public static IWebHostEnvironment Environment { get; set; }
         public static IHttpContextAccessor HttpContextAccessor { get; set; }
 
@@ -25,6 +26,7 @@ namespace Jugnoon.Utility
     public class SiteConfiguration
     {
         public static string URL { get; set; } = "";
+        public static string Theme { get; set; } = "";
     }
 
     public class SystemDirectoryPaths
@@ -58,6 +60,11 @@ namespace Jugnoon.Utility
         /// Application directory path where admin control panel application hosted and published (Angular App)
         /// </summary>
         public static string AdminAppPath { get; set; } = "/wwwroot/app/admin/dist/";
+
+        /// <summary>
+        /// Messages Url
+        /// </summary>
+        public static string MessageUrl { get; set; } = "account/inbox";
 
     }
 }

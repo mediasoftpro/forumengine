@@ -1,12 +1,16 @@
 ﻿namespace Jugnoon.Settings
 {
     public class Features
-    {       
-
+    {
         /// <summary>
-        /// Enable forums functionality in application if module available
+        /// Enable forum functionality in application if module available
         /// </summary>
         public bool enable_forums { get; set; }
+
+        /// <summary>
+        /// Enable blogs functionality in application if module available
+        /// </summary>
+        public bool enable_blogs { get; set; }
 
         /// <summary>
         /// Toggle on | off categorizing contents and listing

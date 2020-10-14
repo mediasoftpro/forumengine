@@ -5,9 +5,8 @@ ForumEngine is a complete solution that includes all basic and advance features 
 
 It can be used as standalone application or can be easily integrated in existing solution
 
-This project is currently built with ASP.NET Core 3.1 + Angular 9.0.2 + Bootstrap 4.4.1
+This project is currently built with ASP.NET Core 3.1 + Angular 10.1 + NGRX + Bootstrap 4.4.1
 
-### [Product Demo](http://forumengine.aspnetprojects.com/ "Product Demo")
 
 ### [Product Home & Documentation](https://www.mediasoftpro.com/product/forumengine "Product Home & Documentation")
 
@@ -16,9 +15,11 @@ This project is currently built with ASP.NET Core 3.1 + Angular 9.0.2 + Bootstr
 List of main features includes
 - **MEMBERSHIP**: Extended ASP.NET Identity Module that can allow users to create account, login, manage account, update profile, change password, email etc
 - **Forum Topics**: Allow user or site administrator to post unlimited topics, replies with controls to review, approve, resolve and take other actions.
+- **BLOGS**: Full-featured articles, news, blogs posting engine with all basics & advance features
 - **MY ACCOUNT**: Advance my-account application (Angular based) that can allow users to manage submitted and replied topics, profile, settings and configurations.
 - **SOCIAL PROFILES**: It support public user profiles to access public contents of each other.
 - **CONTROL PANEL**: Advance control panel (single page latest angular based) that can help site administrator to manage website settings, configurations, contents, users, reports etc.
+- **GAMIFY**: Optional gamify script to manage complex gamification functionality within application including badges, rewards, points, credits, levels, packages and more.
 - **CONFIGURATIONS**: Support advance configuration section that can allow you configure almost every available features on the fly without making changes in code.
 - **INSTALLATION**: Single step easy installation module that can help you easily configure database, default admin user, initialize application with default settings to make your application ready to use.
 - **MULTIPLE LANGUAGES**: Support managing multiple ui cultures, configure your default language and allow multiple language options for user to choose from.
@@ -52,6 +53,6 @@ If you want to report a new bug, please check if the bug isn´t already reported
 ### Contribute
 Checkout [CONTRIBUTING.md](https://github.com/mediasoftpro/forumengine/blob/master/CONTRIBUTING.md "CONTRIBUTING.md") document for more detail.
 
-### Donate
-If you like our product and contribute in the form of donation, [click here](https://github.com/mediasoftpro/forumengine/blob/master/DONATE.md "click here") for more detail.
+### Author
+Muhammad Irfan => Lead Software Engineer
 

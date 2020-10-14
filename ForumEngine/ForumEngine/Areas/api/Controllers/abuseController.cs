@@ -7,10 +7,8 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Caching.Memory;
 using Jugnoon.Framework;
 using Microsoft.Extensions.Localization;
-using ForumEngine.Models;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using Jugnoon.Localize;
@@ -27,7 +25,7 @@ namespace ForumEngine.Areas.api.Controllers
         public abuseController(
         IOptions<SiteConfiguration> settings,
         ApplicationDbContext context,
-        IStringLocalizer<GeneralResource> generalLocalizer,
+       IStringLocalizer<GeneralResource> generalLocalizer,
         IHttpContextAccessor _httpContextAccessor
         )
         {

@@ -1,0 +1,30 @@
+﻿@inject IStringLocalizer<GeneralResource> GeneralResource
+@inject IStringLocalizer<ForumResource> ForumResource
+
+<div class="row">
+    <div class="col-md-12">
+        @await Html.PartialAsync("~/views/themes/" + SiteConfiguration.Theme + "/forum/partials/_List_SM.cshtml", new Jugnoon.Forums.Models.ForumTopicsListViewModel()
+        {
+                BrowseText = GeneralResource["_see_all"].Value,
+                HeadingTitle = ForumResource["_recent_topics"].Value,
+                NoRecordFoundText = ForumResource["_no_topics"].Value,
+                ListObject = new Jugnoon.Scripts.ListItems()
+                {
+                    showUser = false,
+                    showViews = true,
+                    showDate = true,
+                    ColWidth = "col-md-3 col-xs-6",
+                    isHover = false
+                },
+                BrowseUrl = Config.GetUrl("videos/"),
+                QueryOptions = new Jugnoon.Forums.ForumTopicEntity()
+                {
+                    order = "topic.created_at desc",
+                    ispublic = true,
+                    iscache = true,
+                    isfeatured = FeaturedTypes.All,
+                    pagesize = 20,
+                }
+            })
+    </div>
+</div>

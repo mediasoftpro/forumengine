@@ -1,26 +1,34 @@
 /* -------------------------------------------------------------------------- */
 /*                           Product Name: ForumEngine                        */
-/*                            Author: Mediasoftpro                            */
+/*                      Author: Mediasoftpro (Muhammad Irfan)                 */
 /*                       Email: support@mediasoftpro.com                      */
 /*       License: Read license.txt located on root of your application.       */
 /*                     Copyright 2007 - 2020 @Mediasoftpro                    */
 /* -------------------------------------------------------------------------- */
 
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
-import { select } from "@angular-redux/store";
+import { Store, select } from "@ngrx/store";
+import { IAppState } from "../../reducers/store/model";
 import { Router, ActivatedRoute } from "@angular/router";
-import { Observable } from "rxjs/Observable";
+
 
 // services
 import { SettingsService } from "./services/settings.service";
 import { DataService } from "./services/data.service";
 
 // shared services
-import { CoreAPIActions } from "../../reducers/core/actions";
 import { fadeInAnimation } from "../../animations/core";
 // reducer actions
-import { ForumsAPIActions } from "../../reducers/forums/actions";
+import * as forumsSelectors from "../../reducers/forums/selectors";
+import { applyFilter, updateFilterOptions, refresh_pagination, selectAll } from "../../reducers/forums/actions";
+import { refreshListStats } from "../../reducers/core/actions";
+import { Notify } from "../../reducers/core/actions";
+import {auth} from "../../reducers/users/selectors";
+
 import { PermissionService } from "../../admin/users/services/permission.service";
+
+
+
 
 @Component({
   templateUrl: "./forums.html",
@@ -30,35 +38,21 @@ import { PermissionService } from "../../admin/users/services/permission.service
 })
 export class ForumsComponent implements OnInit {
   constructor(
+    private _store: Store<IAppState>,
     private settingService: SettingsService,
     private dataService: DataService,
-    private coreActions: CoreAPIActions,
-    private actions: ForumsAPIActions,
     public permission: PermissionService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
 
-  @select(["forums", "filteroptions"])
-  readonly filteroptions$: Observable<any>;
-
-  @select(["forums", "categories"])
-  readonly categories$: Observable<any>;
-
-  @select(["forums", "itemsselected"])
-  readonly isItemSelected$: Observable<any>;
-
-  @select(["forums", "isloaded"])
-  readonly isloaded$: Observable<any>;
-
-  @select(["forums", "records"])
-  readonly records$: Observable<any>;
-
-  @select(["forums", "pagination"])
-  readonly pagination$: Observable<any>;
-
-  @select(["users", "auth"])
-  readonly auth$: Observable<any>;
+  readonly filteroptions$ = this._store.pipe(select(forumsSelectors.filteroptions));
+  readonly categories$ = this._store.pipe(select(forumsSelectors.categories));
+  readonly isItemSelected$ = this._store.pipe(select(forumsSelectors.itemsselected));
+  readonly records$ = this._store.pipe(select(forumsSelectors.records));
+  readonly pagination$ = this._store.pipe(select(forumsSelectors.pagination));
+  readonly isloaded$ = this._store.pipe(select(forumsSelectors.isloaded));
+  readonly auth$ = this._store.pipe(select(auth));
 
   // permission logic
   isAccessGranted = false; // Granc access on resource that can be full access or read only access with no action rights
@@ -74,6 +68,7 @@ export class ForumsComponent implements OnInit {
   FilterOptions: any; // local copy of observable query filters
   Records = 0;
   Pagination: any = {};
+
   ngOnInit() {
     // user authentication & access right management
     // full resource access key and readonly key can be generated via roles management
@@ -99,12 +94,12 @@ export class ForumsComponent implements OnInit {
     this.ToolbarOptions = this.settingService.getToolbarOptions();
 
     this.filteroptions$.subscribe(options => {
-      this.FilterOptions = options;
+     this.FilterOptions = Object.assign({}, options);
       if (options.track_filter) {
         this.loadRecords(this.FilterOptions);
         // reset track filter to false again
         options.track_filter = false;
-        this.actions.updateFilterOptions(options);
+        this._store.dispatch(new updateFilterOptions(this.FilterOptions));
       }
     });
     this.isItemSelected$.subscribe((selectedItems: boolean) => {
@@ -142,12 +137,12 @@ export class ForumsComponent implements OnInit {
       if (params["catname"] !== undefined) {
         this.FilterOptions.forumid = params["catname"];
         this.FilterOptions.track_filter = true; // to force triggering load event via obvervable subscription
-        this.actions.updateFilterOptions(this.FilterOptions);
+        this._store.dispatch(new updateFilterOptions(this.FilterOptions));
       }
     });
   }
   selectAll(selectall: boolean) {
-    this.actions.selectAll(selectall);
+     this._store.dispatch(new selectAll(selectall));
   }
 
   loadRecords(options: any) {
@@ -164,10 +159,10 @@ export class ForumsComponent implements OnInit {
         this.ProcessActions(selection.value);
         return;
       case "f_status":
-        this.actions.applyFilter({ attr: "isenabled", value: selection.value });
+         this._store.dispatch(new applyFilter({ attr: "isenabled", value: selection.value }));
         break;
       case "pagesize":
-        this.actions.applyFilter({ attr: "pagesize", value: selection.value });
+         this._store.dispatch(new applyFilter({ attr: "pagesize", value: selection.value }));
         break;
     }
   }
@@ -183,7 +178,7 @@ export class ForumsComponent implements OnInit {
       _filterOptions.categoryname !== ""
     )
       _filterOptions.forumid = _filterOptions.categoryname;
-    this.actions.updateFilterOptions(_filterOptions);
+      this._store.dispatch(new updateFilterOptions(_filterOptions));
   }
 
   AddRecord() {
@@ -201,11 +196,11 @@ export class ForumsComponent implements OnInit {
 
   ProcessActions(selection: any) {
     if (!this.isActionGranded) {
-      this.coreActions.Notify({
+      this._store.dispatch(new Notify({
         title: "Permission Denied",
         text: "",
         css: "bg-danger"
-      });
+      }));
       return;
     }
     if (this.SelectedItems.length > 0) {
@@ -217,16 +212,15 @@ export class ForumsComponent implements OnInit {
   }
 
   refreshStats() {
-    this.actions.refresh_pagination({
-      type: 0,
+    this._store.dispatch(new refresh_pagination({
       totalrecords: this.Records,
       pagesize: this.FilterOptions.pagesize
-    });
+    }));
     // refresh list states
-    this.coreActions.refreshListStats({
+    this._store.dispatch(new refreshListStats({
       totalrecords: this.Records,
       pagesize: this.FilterOptions.pagesize,
       pagenumber: this.Pagination.currentPage
-    });
+    }));
   }
 }

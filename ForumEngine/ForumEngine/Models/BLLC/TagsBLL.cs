@@ -23,7 +23,8 @@ namespace Jugnoon.BLL
         {
             All = 100,
             General = 5,
-            Forums = 7,
+            Blogs = 4,
+            Forums = 7
         };
 
         public enum TagType
@@ -360,15 +361,6 @@ namespace Jugnoon.BLL
             return collectionQuery;
         }
 
-        public static IQueryable<JGN_Tags> AddSortOption(IQueryable<JGN_Tags> collectionQuery, string field, string direction)
-        {
-            var reverse = false;
-            if (direction == "desc")
-                reverse = true;
-
-            return (IQueryable<JGN_Tags>)collectionQuery.Sort(field, reverse);
-
-        }
         private static System.Linq.Expressions.Expression<Func<JGN_Tags, bool>> returnWhereClause(TagEntity entity)
         {
             var where_clause = PredicateBuilder.New<JGN_Tags>(true);

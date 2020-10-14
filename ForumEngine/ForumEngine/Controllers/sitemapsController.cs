@@ -1,5 +1,4 @@
 ﻿using Jugnoon.BLL;
-using Jugnoon.Forums;
 using System;
 using Microsoft.AspNetCore.Mvc;
 using Jugnoon.Entity;
@@ -13,6 +12,7 @@ using Jugnoon.Utility;
 using System.Threading.Tasks;
 using Jugnoon.Settings;
 using Jugnoon.Localize;
+using Jugnoon.Forums;
 
 namespace ForumEngine.Controllers
 {
@@ -23,7 +23,7 @@ namespace ForumEngine.Controllers
            IOptions<SiteConfiguration> settings,
            IMemoryCache memoryCache,
            ApplicationDbContext context,
-           IStringLocalizer<GeneralResource> generalLocalizer,
+          IStringLocalizer<GeneralResource> generalLocalizer,
            IWebHostEnvironment _environment,
            IHttpContextAccessor _httpContextAccessor,
            IOptions<General> generalSettings,
@@ -43,12 +43,12 @@ namespace ForumEngine.Controllers
             SiteConfig.HttpContextAccessor = _httpContextAccessor;
         }
 
-  
- 
+
+
         public async Task<IActionResult> categories(string rt = null, string type = null)
         {
             int tp = 0;
-        
+
             if (type != null)
                 tp = Convert.ToInt32(type);
 
@@ -64,7 +64,7 @@ namespace ForumEngine.Controllers
                         ispublic = true,
                         type = tp,
                         pagesize = 50000,
-                        order= "id desc"
+                        order = "id desc"
                     });
                     break;
                 case 1:
@@ -82,7 +82,7 @@ namespace ForumEngine.Controllers
         }
 
         public async Task<IActionResult> forums(string rt = null)
-        {            
+        {
             string sXml = "";
             int responsetype = 0; // 0: google, 1: bing
             if (rt != null)
@@ -96,7 +96,7 @@ namespace ForumEngine.Controllers
                     sXml = await ForumFeeds.BuildYahooSiteMap(_context, 1, 50000);
                     break;
             }
-                       
+
             return this.Content(sXml, "text/xml");
         }
 
@@ -119,14 +119,14 @@ namespace ForumEngine.Controllers
             return this.Content(sXml, "text/xml");
         }
 
- 
+
 
         public IActionResult tags(int? type = null, int? page = null, int? rt = null)
         {
             int pagenumber = 1;
 
             int tp = 0;
-         
+
             if (type != null)
                 tp = (int)type;
 
@@ -144,7 +144,7 @@ namespace ForumEngine.Controllers
                     sXml = XMLBLL.Google_TagySitemap(_context, new TagEntity()
                     {
                         ispublic = true,
-                        type  = (TagsBLL.Types)tp,
+                        type = (TagsBLL.Types)tp,
                         pagesize = 50000,
                         pagenumber = pagenumber,
                         order = "id desc"

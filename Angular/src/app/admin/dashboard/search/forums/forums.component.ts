@@ -8,13 +8,14 @@
 
 import { Component, OnInit } from "@angular/core";
 // redux
-import { select } from "@angular-redux/store";
-import { Observable } from "rxjs/Observable";
+import { Store, select } from "@ngrx/store";
+import { IAppState } from "../../../../reducers/store/model";
 // services
 import { SettingsService } from "../../../../shared/forumtopics/services/settings.service";
 import { DataService } from "../../../../shared/forumtopics/services/data.service";
 import { IFilterOption } from "../../../../reducers/forumtopics/model";
 import { AppConfig } from "../../../../configs/app.config";
+import * as selectors from "../../../../reducers/forumtopics/selectors";
 
 @Component({
   selector: "app-forum-search",
@@ -23,6 +24,7 @@ import { AppConfig } from "../../../../configs/app.config";
 })
 export class ForumSearchComponent implements OnInit {
   constructor(
+    private _store: Store<IAppState>,
     private settingService: SettingsService,
     private dataService: DataService,
     public config: AppConfig

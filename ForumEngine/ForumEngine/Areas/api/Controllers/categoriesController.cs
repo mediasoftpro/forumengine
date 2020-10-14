@@ -12,8 +12,10 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Caching.Memory;
 using Jugnoon.Framework;
+using ForumEngine.Models;
 using Microsoft.Extensions.Localization;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http.Features;
 using Jugnoon.Localize;
 
 namespace ForumEngine.Areas.api.Controllers

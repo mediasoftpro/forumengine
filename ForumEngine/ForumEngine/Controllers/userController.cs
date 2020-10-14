@@ -102,9 +102,6 @@ namespace ForumEngine.Controllers
                 model.FullName = UserUrlConfig.PrepareUserName(model.user, Jugnoon.Settings.Configs.RegistrationSettings.uniqueFieldOption);
 
 
-
-
-
                 model.forumtopics = new ForumTopicsListViewModel()
                 {
                     BrowseText = SiteConfig.generalLocalizer["_see_all"].Value,

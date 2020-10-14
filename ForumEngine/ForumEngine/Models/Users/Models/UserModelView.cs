@@ -1,8 +1,8 @@
 ﻿
 using Jugnoon.Utility;
-using Jugnoon.Forums.Models;
 using System.Collections.Generic;
 using Jugnoon.Framework;
+using Jugnoon.Forums.Models;
 /// <summary>
 /// User Profile Model View
 /// </summary>
@@ -28,6 +28,7 @@ namespace Jugnoon.Models
         public int ActiveIndex { get; set; }
 
         public ForumTopicsListViewModel forumtopics { get; set; }
+
 
     }
 }

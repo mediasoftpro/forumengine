@@ -11,7 +11,8 @@ namespace Jugnoon.Utility
         public static void CreateRequiredDirectories(string strPath)
         {
             Directory.CreateDirectory(strPath);
-
+            
+            
             // create directory to store profile and normal photos    
             Directory.CreateDirectory(strPath + "photos/");
             Directory.CreateDirectory(strPath + "photos/thumbs/");

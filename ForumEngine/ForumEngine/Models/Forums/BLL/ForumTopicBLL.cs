@@ -711,6 +711,38 @@ namespace Jugnoon.Forums
             else if (entity.month > 0)
                 where_clause = where_clause.And(p => p.topic.created_at.Month == entity.month);
 
+
+            if (entity.reporttype != DefaultReportTypes.None)
+            {
+                switch (entity.reporttype)
+                {
+                    case DefaultReportTypes.Today:
+                        where_clause = where_clause.And(p => p.topic.created_at.Date == DateTime.Now.Date);
+                        break;
+                    case DefaultReportTypes.Yesterday:
+                        where_clause = where_clause.And(p => p.topic.created_at.Date == DateTime.Now.Date.AddDays(-1));
+                        break;
+                    case DefaultReportTypes.TodayYesterday:
+                        where_clause = where_clause.And(p => p.topic.created_at.Date == DateTime.Now.Date || p.topic.created_at == DateTime.Now.Date.AddDays(-1));
+                        break;
+                    case DefaultReportTypes.Week:
+                        where_clause = where_clause.And(p => p.topic.created_at >= DateTime.Now.AddDays(-7));
+                        break;
+                    case DefaultReportTypes.LastWeek:
+                        where_clause = where_clause.And(p => p.topic.created_at.Date >= DateTime.Now.Date.AddDays(-14) && p.topic.created_at.Date <= DateTime.Now.Date.AddDays(-7));
+                        break;
+                    case DefaultReportTypes.Month:
+                        where_clause = where_clause.And(p => p.topic.created_at >= DateTime.Now.AddDays(-31));
+                        break;
+                    case DefaultReportTypes.LastMonth:
+                        where_clause = where_clause.And(p => p.topic.created_at.Date >= DateTime.Now.Date.AddMonths(-2) && p.topic.created_at.Date <= DateTime.Now.Date.AddMonths(-1));
+                        break;
+                    case DefaultReportTypes.Year:
+                        where_clause = where_clause.And(p => p.topic.created_at >= DateTime.Now.AddYears(-1));
+                        break;
+                }
+            }
+
             return where_clause;
         }
 

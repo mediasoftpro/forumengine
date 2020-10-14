@@ -1,6 +1,6 @@
 /* -------------------------------------------------------------------------- */
 /*                           Product Name: ForumEngine                        */
-/*                            Author: Mediasoftpro                            */
+/*                      Author: Mediasoftpro (Muhammad Irfan)                 */
 /*                       Email: support@mediasoftpro.com                      */
 /*       License: Read license.txt located on root of your application.       */
 /*                     Copyright 2007 - 2020 @Mediasoftpro                    */
@@ -22,12 +22,14 @@ export class SettingsService {
 
     this.apiOptions = {
       load: APIURL + "api/forumtopics/load",
-      load_reports: APIURL + "api/blogs/load_reports",
+      load_reports: APIURL + "api/forumtopics/load_reports",
+      generate_report: APIURL + "api/forumtopics/generate_report",
       getinfo: APIURL + "api/forumtopics/getinfo",
       action: APIURL + "api/forumtopics/action",
       getforum: APIURL + "api/forum/quickload",
       proc: APIURL + "api/forumtopics/proc",
-      authorize_author: APIURL + "api/forumtopics/authorize_author"
+      authorize_author: APIURL + "api/forumtopics/authorize_author",
+     
     };
   }
 

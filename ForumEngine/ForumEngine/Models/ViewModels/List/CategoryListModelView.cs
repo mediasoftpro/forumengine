@@ -15,6 +15,16 @@ namespace Jugnoon.Models
         /// </summary>
         public bool shortList { get; set; } = false;
 
+        /// <summary>
+        /// Toggle on | off displaying records with category listings
+        /// </summary>
+        public bool display_records { get; set; } = true;
+
+        /// <summary>
+        /// Toggle on | off displaying category thumbnail with category listings
+        /// </summary>
+        public bool display_thumbnail { get; set; } = true;
+
         public int TotalRecords { get; set; } = 10;
 
         public List<JGN_Categories> DataList { get; set; }

@@ -1,6 +1,6 @@
 /* -------------------------------------------------------------------------- */
 /*                           Product Name: ForumEngine                        */
-/*                            Author: Mediasoftpro                            */
+/*                      Author: Mediasoftpro (Muhammad Irfan)                 */
 /*                       Email: support@mediasoftpro.com                      */
 /*       License: Read license.txt located on root of your application.       */
 /*                     Copyright 2007 - 2020 @Mediasoftpro                    */
@@ -22,9 +22,6 @@ import { ForumProcessModule } from "./process/process.module";
 /* services */
 import { SettingsService } from "./services/settings.service";
 import { DataService } from "./services/data.service";
-
-/* actions */
-import { ForumsAPIActions } from "../../reducers/forums/actions";
 
 import { PartialModule } from "../../partials/shared.module";
 
@@ -79,6 +76,6 @@ const routes: Routes = [
   declarations: [ForumsComponent, ListComponent],
   entryComponents: [],
   exports: [ForumsComponent],
-  providers: [SettingsService, DataService, ForumsAPIActions]
+  providers: [SettingsService, DataService]
 })
 export class ForumsModule {}

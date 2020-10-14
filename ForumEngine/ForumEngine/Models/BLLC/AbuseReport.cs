@@ -18,8 +18,10 @@ namespace Jugnoon.BLL
     {
        
         public enum Types
-        {           
+        {
             Forums = 12,
+            Blogs = 7,
+            BlogComments = 8
         };
 
         public enum Status

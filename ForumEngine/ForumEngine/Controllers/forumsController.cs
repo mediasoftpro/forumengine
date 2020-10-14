@@ -99,7 +99,7 @@ namespace ForumEngine.Controllers
                     iscache = true,
                     ispublic = true,
                     pagesize = 20,
-                    order = "forum.priority desc",
+                    order = "priority desc",
                 },
                 DefaultUrl = Config.GetUrl("forums/category/" + title + "/"),
                 PaginationUrl = Config.GetUrl("forums/category/" + title + "/[p]/"),
@@ -691,7 +691,7 @@ namespace ForumEngine.Controllers
                             Term = Item.term,
                             ForumList = ForumBLLC.LoadItems(_context, new ForumEntity()
                             {
-                                order = "forum.priority desc",
+                                order = "priority desc",
                                 categoryname =Item.term,
                                 //categories_str = Item.term,
                                 iscache = false

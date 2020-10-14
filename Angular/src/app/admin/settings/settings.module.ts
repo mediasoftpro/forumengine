@@ -1,6 +1,6 @@
 /* -------------------------------------------------------------------------- */
-/*                           Product Name: ForumEngine                        */
-/*                            Author: Mediasoftpro                            */
+/*                          Product Name: ForumEngine                         */
+/*                      Author: Mediasoftpro (Muhammad Irfan)                 */
 /*                       Email: support@mediasoftpro.com                      */
 /*       License: Read license.txt located on root of your application.       */
 /*                     Copyright 2007 - 2020 @Mediasoftpro                    */
@@ -19,7 +19,6 @@ import { ProcCategoriesModule } from "./categories/process/process.module";
 
 import { ConfigurationsModule } from "./configurations/configuration.module";
 import { DictionaryModule } from "./dictionary/dictionary.module";
-
 import { RoleModule } from "./roles/roles.module";
 import { LanguagesModule } from "./language/language.module";
 import { LogModule } from "./log/log.module";
@@ -30,6 +29,11 @@ import { TagsModule } from "./tags/tags.module";
 import { SettingsRoutingModule } from "./settings.routing.module";
 
 import { ProcRoleModule } from "./roles/process/process.module";
+
+// gamify module
+import { GamifyModule } from "./gamify/gamify.module";
+import { ProcGamifyModule } from "./gamify/process/process.module";
+import { GamifyCategoryModule } from "./gamify/categories/categories.module";
 
 @NgModule({
   imports: [
@@ -49,7 +53,10 @@ import { ProcRoleModule } from "./roles/process/process.module";
     RoleModule,
     ProcMailTemplateModule,
     ProcCategoriesModule,
-    ProcRoleModule
+    ProcRoleModule,
+    GamifyModule,
+    ProcGamifyModule,
+    GamifyCategoryModule
   ],
   declarations: [SettingsComponent]
 })

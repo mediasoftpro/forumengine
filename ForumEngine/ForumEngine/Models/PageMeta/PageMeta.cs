@@ -22,10 +22,10 @@ namespace Jugnoon.Meta
             var Pages = new List<Page>();
             switch(query.controller)
             {
-               
-               case "forums":
-                   // Pages = Blogs.Meta.Prepare();
+                case "blogs":
+                    Pages = Blogs.Meta.Prepare();
                     break;
+                
             }
 
             var _Meta = processMeta(Pages, query);
@@ -151,6 +151,8 @@ namespace Jugnoon.Meta
         public string order { get; set; } = "";
         public string type { get; set; } = "";
         public string filter { get; set; } = "";
+        public string property_type { get; set; } = "";
+
         public string matchterm { get; set; } = "";
         public string matchterm2 { get; set; } = "";
 
@@ -163,6 +165,7 @@ namespace Jugnoon.Meta
         public string controller { get; set; }
         public string index { get; set; }
         public string order { get; set; }
+     
         public string date { get; set; }
 
         /// <summary>
@@ -183,6 +186,11 @@ namespace Jugnoon.Meta
         public bool script_exists { get; set; }
 
         public List<Page> child { get; set;}
+
+        /// <summary>
+        /// Default Layout if not set (path of layouer .cshtml)
+        /// </summary>
+        public string layout { get; set; }
     }
 }
 

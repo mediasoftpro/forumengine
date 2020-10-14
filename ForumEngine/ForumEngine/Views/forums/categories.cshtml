@@ -1,26 +1,4 @@
-﻿@{ 
-    // activate header tab
-    ViewBag.ForumTabCss = "active";
-    // setup search with forum topics
-    ViewBag.SearchType = 5;
+﻿@if (SiteConfiguration.Theme != null && SiteConfiguration.Theme != "")
+{
+    <partial name="~/Views/themes/@SiteConfiguration.Theme/forums/categories.cshtml" />
 }
-<div class="container">
-    <div class="row">
-
-        <div class="col-md-9">
-            <partial name="~/Views/forums/partials/_List.cshtml" />
-            
-            <div class="gap gap-small">
-            </div>
-            @await Html.PartialAsync("~/Views/partials/ads/ad_728.cshtml", new AdsModelView() { isAdult = false })
-        </div>
-
-        <div class="col-md-3">
-
-            @await Html.PartialAsync("~/Views/forums/partials/_Nav.cshtml")
-
-        </div>
-
-    </div>
-
-</div>

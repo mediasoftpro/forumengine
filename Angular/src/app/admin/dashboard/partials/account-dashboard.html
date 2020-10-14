@@ -1,42 +1,86 @@
-<div class="card">
-  <div class="card-body">
-    <div class="m-t-10 m-b-10">
-      <div class="row m-b-10">
-        <div class="col-md-4" *ngIf="(configs$ | async).general.media">
+<div class="dashborad-box">
+  <h4 class="title">My Account</h4>
+  <div class="section-body">
+    <div *ngIf="config.getGlobalVar('theme') === 'findeo'">
+      <div class="row">
+        <div
+          class="col-md-4 col-xs-12"
+          *ngIf="(configs$ | async).general.media"
+        >
           <app-banneruploader
             [Info]="User"
             [MediaSettings]="(configs$ | async).general.media"
             (OnCropped)="onImageUploaded($event)"
           ></app-banneruploader>
         </div>
-        <div class="col-md-8">
-          <h3
-            class="m-b-10"
-            *ngIf="User.firstname !== null"
-          >
+        <div class="col-md-8 col-xs-12">
+          <h3 class="m-b-10" *ngIf="User.firstname !== null">
             {{ User.firstname }} {{ User.lastname }}
           </h3>
-          <h3
-            class="m-b-10"
-            *ngIf="User.firstname === null || User.firstname === ''"
-          >
-            My Account
-          </h3>
+          <h3 class="m-b-10" *ngIf="User.firstname === null">My Account</h3>
           <hr />
-          <p class="m-t-0 m-b-5" *ngIf="User.last_login">
-            Last Login: {{ User.customize_last_login }}
+          <!--<p class="m-t-0 m-b-5">
+                        Last Login: {{ User.customize_last_login }}
+                    </p>-->
+          <p class="m-t-0 m-b-5">
+            Account Created: {{ User.customize_register_date }}
           </p>
-          <p class="m-t-0 m-b-5" *ngIf="User.last_login">
-            Register: {{ User.customize_register_date }}
+          <hr />
+          <p class="m-t-0 m-b-5">
+            Published Properties: {{User.stats.stat_adlistings}}
+          </p>
+          <p class="m-t-0 m-b-5">For Sale: {{User.stats.stat_sale}}</p>
+          <p class="m-t-0 m-b-5">For Rent: {{User.stats.stat_rent}}</p>
+          <p class="m-t-0 m-b-5">Wanted: {{User.stats.stat_wanted}}</p>
+          <!--<p class="m-t-0 m-b-5">
+                        Total Reviewes: 116
+                    </p>
+                    <p class="m-t-0 m-b-5">
+                        Unread Messages: 223
+                    </p>-->
+          <p class="m-t-0 m-b-5">
+            Bookmarked Properties: {{User.stats.stat_fav_adlistings}}
+          </p>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="config.getGlobalVar('theme') === 'findhouses'">
+      <div class="row">
+        <div
+          class="col-lg-2 col-md-3 col-xs-12"
+          *ngIf="(configs$ | async).general.media"
+        >
+          <app-banneruploader
+            [Info]="User"
+            [MediaSettings]="(configs$ | async).general.media"
+            (OnCropped)="onImageUploaded($event)"
+          ></app-banneruploader>
+        </div>
+        <div class="col-lg-10 col-md-9 col-xs-12">
+          <h3 class="m-b-10" *ngIf="User.firstname !== null">
+            {{ User.firstname }} {{ User.lastname }}
+          </h3>
+          <h3 class="m-b-10" *ngIf="User.firstname === null">My Account</h3>
+          <hr />
+         
+          <p class="m-t-0 m-b-5">
+            Account Created: {{ User.customize_register_date }}
+          </p>
+          <hr />
+          <p class="m-t-0 m-b-5">
+            Topics Posted: {{User.stats.stat_forum_topics}}
           </p>
          
         </div>
       </div>
-     
-      <div *ngIf="(configs$ | async).general.features.enable_forums">
-         <app-smfrmtopics-list [type]="0" [title]="'My Topics'" [rout_url]="'/my-topics'"  [browse_url]="'/my-topics'"></app-smfrmtopics-list>
-      </div>
-
     </div>
   </div>
 </div>
+
+<app-smfrmtopics-list
+  [type]="0"
+  [title]="'My Topics'"
+  [rout_url]="'/my-topics'"
+  [browse_url]="'/my-topics'"
+></app-smfrmtopics-list>
+

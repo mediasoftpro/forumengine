@@ -6,6 +6,7 @@ namespace Jugnoon.Models
 {
     public class InfoViewModel
     {
+        public bool ShowRating { get; set; } = true;
         public string PostedCaption { get; set; } = "Posted on";
         /// <summary>
         /// Filter data based on 0: Video, 1: Audio
@@ -66,6 +67,7 @@ namespace Jugnoon.Models
         /// Content directory path (routing paths) used for redirect to content specific pages e.g /videos/ for video categories and so on
         /// </summary>
         public string Path { get; set; } = "";
+
     }
 }
 

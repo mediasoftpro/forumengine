@@ -47,7 +47,7 @@ namespace Jugnoon.BLL
             if (await LanguageBLLC.Count(context, new LanguageEntity() { }) == 0)
             {
                 var Languages = new List<JGN_Languages>
-                {    
+                {
                      new JGN_Languages { culturename = "en-US", language = "English", region = "United State", isdefault = 1, isselected = 1 },
                      new JGN_Languages { culturename = "ar-SA", language = "Arabic", region = "Saudi Arabia", isdefault = 0, isselected = 1 },
                      new JGN_Languages { culturename = "de-DE", language = "German", region = "Germany", isdefault = 0, isselected = 1 },
@@ -78,6 +78,7 @@ namespace Jugnoon.BLL
             {
                 var Categories = new List<JGN_Categories>
                 {    new JGN_Categories { title = "General", type = (byte)CategoryBLL.Types.Forum, priority = 100, isenabled = 1  },
+                     new JGN_Categories { title = "General", type = (byte)CategoryBLL.Types.Blogs, priority = 100, isenabled = 1  },
                      new JGN_Categories { title = "Sexual Content", type = 4, priority = 100, isenabled = 1  },
                      new JGN_Categories { title = "Voilent or Repulsive Contents", type = 4, priority = 99, isenabled = 1  },
                      new JGN_Categories { title = "Hateful or Abusive Content", type = 4, priority = 98, isenabled = 1  },
@@ -398,6 +399,7 @@ namespace Jugnoon.BLL
                         return_template_signature()
                     });
                 }
+
 
                 foreach (var Template in MailTemplates)
                 {

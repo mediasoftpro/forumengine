@@ -21,6 +21,9 @@ namespace Jugnoon.Models
 
         [MaxLength(200)]
         public string picturename { get; set; }
+        
+        [MaxLength(25)]
+        public string mobile { get; set; }
 
         public byte isenabled { get; set; }
 
@@ -31,6 +34,7 @@ namespace Jugnoon.Models
         public short roleid { get; set; }
        
         public byte type { get; set; }
+        
 
         [NotMapped]
         public string url { get; set; }
@@ -40,8 +44,6 @@ namespace Jugnoon.Models
 
         [NotMapped]
         public JGN_User_Settings settings { get; set; }
-
-        
 
         [NotMapped]
         public List<JGN_Attr_TemplateSections> options { get; set; }

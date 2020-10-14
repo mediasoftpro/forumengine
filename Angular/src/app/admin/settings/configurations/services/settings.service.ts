@@ -1,6 +1,6 @@
 /* -------------------------------------------------------------------------- */
-/*                           Product Name: ForumEngine                        */
-/*                            Author: Mediasoftpro                            */
+/*                          Product Name: ForumEngine                         */
+/*                      Author: Mediasoftpro (Muhammad Irfan)                 */
 /*                       Email: support@mediasoftpro.com                      */
 /*       License: Read license.txt located on root of your application.       */
 /*                     Copyright 2007 - 2020 @Mediasoftpro                    */
@@ -32,6 +32,7 @@ export class SettingsService {
         dbsetupcompleted: APIURL + "api/configuration/dbsetupcompleted",
         dbusersetup: APIURL + "api/user/dbusersetup",
         general: APIURL + "api/configuration/general",
+        premium: APIURL + "api/configuration/premium",
         media: APIURL + "api/configuration/media",
         features: APIURL + "api/configuration/features",
         listings: APIURL + "api/configuration/listings",
@@ -41,11 +42,24 @@ export class SettingsService {
         social: APIURL + "api/configuration/social",
         contact: APIURL + "api/configuration/contact",
         smtp: APIURL + "api/configuration/smtp",
-        rechapcha: APIURL + "api/configuration/rechapcha"
+        comment: APIURL + "api/configuration/comment",
+        location: APIURL + "api/configuration/location",
+        rechapcha: APIURL + "api/configuration/rechapcha",
+        stripe: APIURL + "api/configuration/stripe",
+        elasticsearch: APIURL + "api/configuration/elasticsearch",
+        activecompaign: APIURL + "api/configuration/activecompaign",
+        zendesk: APIURL + "api/configuration/zendesk",
       },
-      forums: {
-        general: APIURL + "api/forum/configs_general"
+      blogs: {
+        general: APIURL + "api/blogs/configs_general",
+        aws: APIURL + "api/blogs/configs_aws"
+      },
+      
+      classified: {
+        general: APIURL + "api/adlisting/configs_general",
+        aws: APIURL + "api/adlisting/configs_aws"
       }
+     
     };
 
     this.init_toolbar_options();

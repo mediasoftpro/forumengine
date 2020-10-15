@@ -95,6 +95,224 @@ namespace Jugnoon.Core
 
             #endregion
 
+                #region Blogs
+
+            // blog post detail
+            routeBuilder.MapControllerRoute(
+                    null,
+                    "post/{id}/{title}",
+                    defaults: new { controller = "post", action = "Index" }
+            );
+
+            // blogs category processing routes
+            routeBuilder.MapControllerRoute(
+                     null,
+                     "blogs/category/filter/{title}/{filter}",
+                     defaults: new { controller = "blogs", action = "category" }
+
+            );
+
+            routeBuilder.MapControllerRoute(
+                   null,
+                   "blogs/category/filter/{title}/{filter}/{pagenumber}",
+                   defaults: new { controller = "blogs", action = "category" }
+            );
+
+            routeBuilder.MapControllerRoute(
+                      null,
+                      "blogs/category/filter/{title}/{filter}/{order}",
+                      defaults: new { controller = "blogs", action = "category" }
+            );
+
+            routeBuilder.MapControllerRoute(
+                  null,
+                  "blogs/category/filter/{title}/{filter}/{order}/{pagenumber}",
+                  defaults: new { controller = "blogs", action = "category" }
+            );
+
+            routeBuilder.MapControllerRoute(
+                    null,
+                    "blogs/category/{title}/{order}",
+                    defaults: new { controller = "blogs", action = "category" }
+            );
+
+            routeBuilder.MapControllerRoute(
+                  null,
+                  "blogs/category/{title}/{order}/{pagenumber}",
+                  defaults: new { controller = "blogs", action = "category" }
+            );
+
+            routeBuilder.MapControllerRoute(
+                   null,
+                   "blogs/category/{title}",
+                   defaults: new { controller = "blogs", action = "category" }
+            );
+
+            routeBuilder.MapControllerRoute(
+                 null,
+                 "blogs/category/{title}/{pagenumber}",
+                 defaults: new { controller = "blogs", action = "category" }
+            );
+
+            // blogs tag processing routes
+            routeBuilder.MapControllerRoute(
+                  null,
+                  "blogs/label/filter/{title}/{filter}",
+                  defaults: new { controller = "blogs", action = "label" }
+            );
+
+            routeBuilder.MapControllerRoute(
+                  null,
+                  "blogs/label/filter/{title}/{filter}/{pagenumber}",
+                  defaults: new { controller = "blogs", action = "label" }
+            );
+
+            routeBuilder.MapControllerRoute(
+                 null,
+                 "blogs/label/filter/{title}/{filter}/{order}",
+                 defaults: new { controller = "blogs", action = "label" }
+            );
+
+            routeBuilder.MapControllerRoute(
+                  null,
+                  "blogs/label/filter/{title}/{filter}/{order}/{pagenumber}",
+                  defaults: new { controller = "blogs", action = "label" }
+            );
+
+            routeBuilder.MapControllerRoute(
+               null,
+               "blogs/label/{title}/{order}/{pagenumber}",
+               defaults: new { controller = "blogs", action = "label" }
+            );
+
+            routeBuilder.MapControllerRoute(
+               null,
+               "blogs/label/{title}/{order}",
+               defaults: new { controller = "blogs", action = "label" }
+            );
+
+            routeBuilder.MapControllerRoute(
+               null,
+               "blogs/label/{title}/{order}/{pagenumber}",
+               defaults: new { controller = "blogs", action = "label" }
+            );
+
+            routeBuilder.MapControllerRoute(
+               null,
+               "blogs/label/{title}",
+               defaults: new { controller = "blogs", action = "label" }
+            );
+
+            routeBuilder.MapControllerRoute(
+               null,
+               "blogs/label/{title}/{pagenumber}",
+               defaults: new { controller = "blogs", action = "label" }
+            );
+
+            routeBuilder.MapControllerRoute(
+              null,
+              "blogs/archive/{month}/{year}",
+              defaults: new { controller = "blogs", action = "archive" }
+           );
+
+            routeBuilder.MapControllerRoute(
+               null,
+               "blogs/archive/{month}/{year}/{pagenumber}",
+               defaults: new { controller = "blogs", action = "archive" }
+            );
+
+            routeBuilder.MapControllerRoute(
+                null,
+                "blogs/categories",
+                defaults: new { controller = "blogs", action = "categories" }
+            );
+
+            routeBuilder.MapControllerRoute(
+                  null,
+                  "blogs/categories/{pagenumber}",
+                  defaults: new { controller = "blogs", action = "categories" }
+            );
+
+            routeBuilder.MapControllerRoute(
+                  null,
+                  "blogs/archivelist",
+                  defaults: new { controller = "blogs", action = "archivelist" }
+            );
+
+            routeBuilder.MapControllerRoute(
+                  null,
+                  "blogs/labels",
+                  defaults: new { controller = "blogs", action = "labels" }
+            );
+
+            routeBuilder.MapControllerRoute(
+                  null,
+                  "blogs/labels/{pagenumber}",
+                  defaults: new { controller = "blogs", action = "labels" }
+            );
+
+            routeBuilder.MapControllerRoute(
+                  null,
+                  "blogs/labels/search/{term}",
+                  defaults: new { controller = "blogs", action = "labels" }
+            );
+
+            routeBuilder.MapControllerRoute(
+                  null,
+                  "blogs/labels/search/{term}/{pagenumber}",
+                  defaults: new { controller = "blogs", action = "labels" }
+            );
+
+            routeBuilder.MapControllerRoute(
+                   null,
+                   "blogs/queryresult",
+                   defaults: new { controller = "blogs", action = "queryresult" }
+            );
+
+            routeBuilder.MapControllerRoute(
+                null,
+                "blogs/search/{term}",
+                defaults: new { controller = "blogs", action = "search" }
+            );
+
+            routeBuilder.MapControllerRoute(
+                null,
+                "blogs/page/{pagenumber}",
+                defaults: new { controller = "blogs", action = "Index" }
+            );
+
+            routeBuilder.MapControllerRoute(
+                null,
+                "blogs/added/{filter}",
+                defaults: new { controller = "blogs", action = "Index" }
+            );
+
+            routeBuilder.MapControllerRoute(
+                   null,
+                   "blogs/added/{filter}/{pagenumber}",
+                   defaults: new { controller = "blogs", action = "Index" }
+            );
+
+            routeBuilder.MapControllerRoute(
+                 null,
+                 "blogs/{order}",
+                 defaults: new { controller = "blogs", action = "Index" }
+            );
+
+            routeBuilder.MapControllerRoute(
+                 null,
+                 "blogs/{order}/{pagenumber}",
+                 defaults: new { controller = "blogs", action = "Index" }
+            );
+
+            routeBuilder.MapControllerRoute(
+                 null,
+                 "blogs/",
+                 defaults: new { controller = "blogs", action = "Index" }
+            );
+
+            #endregion
+
             routeBuilder.MapControllerRoute(
                 name: "ActionApi",
                 pattern: "api/{controller}/{action}/{name?}"

@@ -20,7 +20,7 @@ namespace Jugnoon.BLL
         General = 0,
         Members = 1,
         Blogs = 8,
-        Classified = 10
+        Forum = 12
     };
 
     public class MailTemplateBLL
